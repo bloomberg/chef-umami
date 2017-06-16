@@ -22,11 +22,11 @@ my_resources = {}
 cookbook_to_test = 'system-base'
 resources_to_test = []
 client.run_status.run_context.resource_collection.each do |resource|
-  puts "\nRESOURCE: '#{resource.to_s}'"
-  puts "NAME:     '#{resource.name}'"
-  puts "TYPE:     '#{resource.class}'"
-  puts "ACTION:   '#{resource.action.to_s}'"
-  puts "FROM:     '#{resource.cookbook_name}::#{resource.recipe_name}'"
+#  puts "\nRESOURCE: '#{resource.to_s}'"
+#  puts "NAME:     '#{resource.name}'"
+#  puts "TYPE:     '#{resource.class}'"
+#  puts "ACTION:   '#{resource.action.to_s}'"
+#  puts "FROM:     '#{resource.cookbook_name}::#{resource.recipe_name}'"
   if resource.cookbook_name == cookbook_to_test
     resources_to_test << resource
     if my_resources.has_key?(resource.to_s)
@@ -36,9 +36,6 @@ client.run_status.run_context.resource_collection.each do |resource|
     end
   end
 end
-
-# We may have duplicate resources. Address this. Doesn't Chef ensure these are merged?
-puts "#{my_resources.sort_by {|key, value| value}.reverse}"
 
 # TODOs
 # If resource clas matches /Chef::Resource/ let’s generate some tests; call out the others for future attention
@@ -85,3 +82,11 @@ puts "Resource count: #{resources_to_test.length}"
 resources_to_test.each do |resource|
  puts "#{resource.to_s} [#{resource.class}] from recipe '#{resource.recipe_name}'"
 end
+
+puts
+# We may have duplicate resources. Address this. Doesn't Chef ensure these are merged?
+#puts "#{my_resources.sort_by {|key, value| value}.reverse}"
+my_resources.each do |resource, count|
+  puts "DUPE RESOURCE (#{resource}) SEEN #{count} TIMES" if count > 1
+end
+
