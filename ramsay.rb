@@ -26,6 +26,7 @@ require 'chef/cookbook_loader'
 require 'chef/cookbook_uploader'
 require 'chef_zero/server'
 require 'chef-dk/command/push'
+require 'chef-dk/command/export'
 require 'kitchen'
 require 'kitchen/driver/dummy'
 require 'kitchen/provisioner/chef_zero'
@@ -66,7 +67,7 @@ puts # DEBUG
 # Run our own chef-zero instance and use the cookbooks in the sandbox to
 # enumerate the resources.
 server = ChefZero::Server.new(port: 8889)
-server.start_background
+#server.start_background
 
 json_args = nil # nil if we want to use Policyfile
 #json_args = {"run_list" => "recipe[system-base]"}
@@ -126,9 +127,9 @@ chef_push.run(['--debug', '--config', "#{sandbox_path}/client.rb", 'ramsay-group
 # (full path: /tmp/sweet-ramsay-sandbox-20170614-6865-1p9rkao)
 # IDEA: Perhaps we need to teach Chef that our cookbooks are in
 # 'cookbook_artifacts/'...
-sandbox_path = '/tmp/sweet-ramsay-sandbox-20170614-14538-1i15rqq'
-result = `chef push --debug --config #{sandbox_path}/client.rb ramsay-group #{sandbox_path}/Policyfile.lock.json`
-ap result
+#sandbox_path = '/tmp/sweet-ramsay-sandbox-20170614-14538-1i15rqq'
+#result = `chef push --debug --config #{sandbox_path}/client.rb ramsay-group #{sandbox_path}/Policyfile.lock.json`
+#ap result
 
 =begin
 # get node information, including node_name, required to get/build node info;
