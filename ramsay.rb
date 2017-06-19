@@ -33,6 +33,41 @@ require 'kitchen/provisioner/chef_zero'
 require 'kitchen/transport/ssh'
 require 'kitchen/verifier/dummy'
 
+### EXPORT
+require 'chef-dk/policyfile_services/export_repo'
+require 'tmpdir' # Extends Dir.
+### EXPORT
+
+# TODO: Test for this existing and so something appropriate.
+policyfile_lock_file = 'Policyfile.lock.json'
+
+cookbook_dir = File.basename(Dir.pwd)
+export_root = Dir.mktmpdir('ramsay-')
+# We need the target dir named the same as the source dir so that `chef` commands
+# work as happily programatically as they would via the command line.
+# This is because the commands assume they're being run from within a cookbook
+# directory.
+export_path = File.join(export_root, cookbook_dir)
+export_service = ChefDK::PolicyfileServices::ExportRepo.new(
+  policyfile: policyfile_lock_file,
+  export_dir: export_path
+)
+
+puts "Exporting #{cookbook_dir} to #{export_path}..."
+export_service.run
+# TODO: Update .chef/config.rb to include a chef_server_url value appropriate
+# for chef-zero so we can load up the config from the file via
+# Chef::Config.from_file("#{export_path}/.chef/config.rb").
+puts "Export Complete!"
+chef_config_file = "#{export_path}/.chef/config.rb"
+puts "Updating #{chef_config_file} with some important bits..."
+File.open(chef_config_file, 'a') do |f|
+  f.puts 'chef_server_url "http://127.0.0.1:8889"'
+end
+Chef::Config.from_file("#{export_path}/.chef/config.rb")
+ap Chef::Config
+
+=begin
 # TODO: Thinking we may want to hake TK get its config from a Ramsay-specific
 # Kitchen config file (i.e. kitchen.ramsay.yml).
 ramsay_driver = Kitchen::Driver::Dummy.new
@@ -63,6 +98,7 @@ instance = Kitchen::Instance.new(instance_options)
 #sandbox_path = ramsay_provisioner.sandbox_path
 #puts "SANDBOX PATH: #{sandbox_path}" # DEBUG
 puts # DEBUG
+=end
 
 # Run our own chef-zero instance and use the cookbooks in the sandbox to
 # enumerate the resources.
@@ -100,36 +136,6 @@ uploader.upload_cookbooks
 # The above code can still be expanded upon for users not using Policyfile.
 # END NON-POLICYFILE COOKBOOK UPLOAD APPROACH
 =end
-
-=begin
-# Testing how we can call `chef push` programmatically. Not working so hot, yet.
-chef_push = ChefDK::Command::Push.new
-#ap chef_push.methods.sort - Object.methods # DEBUG
-chef_push.apply_params!(['--config', "#{sandbox_path}/client.rb", 'ramsay-group', "#{sandbox_path}/Policyfile.lock.json"])
-ap chef_push.inspect # DEBUG
-ap chef_push.config # DEBUG
-#chef_push.run(['--config', "#{sandbox_path}/client.rb"])
-
-# If we pass the policy_group and relative path for the policy file to #run,
-# we get an error like so:
-# Error: Invalid lockfile data
-# Reason: (ChefDK::MalformedCookbook) The cookbook at path source `.' is expected
-# to be named `redhat-baseline', but is now named `sweet-ramsay-sandbox-20170614-10860-hu6jq7'
-# (full path: /tmp/sweet-ramsay-sandbox-20170614-10860-hu6jq7)
-chef_push.run(['--debug', '--config', "#{sandbox_path}/client.rb", 'ramsay-group', "#{sandbox_path}/Policyfile.lock.json"])
-=end
-
-# Hmmmm, we still get:
-# Error: Invalid lockfile data
-# Reason: (ChefDK::MalformedCookbook) The cookbook at path source `.' is
-# expected to be named `redhat-baseline', but is now named
-# `sweet-ramsay-sandbox-20170614-6865-1p9rkao'
-# (full path: /tmp/sweet-ramsay-sandbox-20170614-6865-1p9rkao)
-# IDEA: Perhaps we need to teach Chef that our cookbooks are in
-# 'cookbook_artifacts/'...
-#sandbox_path = '/tmp/sweet-ramsay-sandbox-20170614-14538-1i15rqq'
-#result = `chef push --debug --config #{sandbox_path}/client.rb ramsay-group #{sandbox_path}/Policyfile.lock.json`
-#ap result
 
 =begin
 # get node information, including node_name, required to get/build node info;
