@@ -152,6 +152,14 @@ recipe_resources.each do |recipe, resources|
   puts "end"
 end
 
+def test_directory(name)
+  "  describe file('#{name}') do\n    it { should be_directory }\n  end"
+end
+
+def test_package(name)
+  "  describe package('#{name}') do\n    it { should be_installed }\n  end"
+end
+
 puts "\n\n\n"
 recipe_resources.each do |recipe, resources|
   (cookbook, recipe) = recipe.split('::')
@@ -160,9 +168,10 @@ recipe_resources.each do |recipe, resources|
   puts "require 'serverspec'"
   resources.each do |resource|
     puts "  "
-    puts "  describe #{resource.declared_type}('#{resource.name}') do"
-    puts "    it { should do_something_appropriate_for_this_resource }"
-    puts "  end"
+    puts send("test_#{resource.declared_type}", resource.name)
+    #puts "  describe #{resource.declared_type}('#{resource.name}') do"
+    #puts "    it { should do_something_appropriate_for_this_resource }"
+    #puts "  end"
     #p "#{resource.name}: #{resource.state}" # We need this info to generate tests re: resource state.
   end
   puts "end"
