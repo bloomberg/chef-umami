@@ -12,8 +12,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 2.3"
 
-  gem.files = %w{Rakefile LICENSE README.md warning.txt} +
-    Dir.glob("*.gemspec")
   gem.executables   = %w{ ramsay }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
