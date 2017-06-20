@@ -2,4 +2,6 @@
 
 chef_ramsay_lib = File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 $:.unshift(chef_ramsay_lib)
-require "chef-ramsay"
+require "chef-ramsay/runner"
+
+Ramsay::Runner.new('Hi').run
