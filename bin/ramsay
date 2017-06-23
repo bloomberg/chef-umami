@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/opt/chefdk/embedded/bin/ruby # Mac OSX
 
 chef_ramsay_lib = File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 $:.unshift(chef_ramsay_lib)

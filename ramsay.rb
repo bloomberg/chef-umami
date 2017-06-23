@@ -94,7 +94,7 @@ policyfile_uploader = ChefDK::Policyfile::Uploader.new(
   http_client: http_client,
   policy_document_native_api: policy_document_native_api
 )
-policyfile_uploader.upload_policy # Just the policy
+#policyfile_uploader.upload_policy # Just the policy
 policyfile_uploader.upload
 puts "Policyfile upload complete"
 
@@ -152,6 +152,8 @@ recipe_resources.each do |recipe, resources|
   puts "end"
 end
 
+# TODO: Pass the resource object so we can check the action and call on the
+# appropriate test.
 def test_directory(name)
   "  describe file('#{name}') do\n    it { should be_directory }\n  end"
 end
