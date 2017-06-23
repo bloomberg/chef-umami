@@ -5,25 +5,25 @@ module Ramsay
   class Policyfile
     class Exporter
 
-			attr_reader :chef_config_file
+      attr_reader :chef_config_file
       attr_reader :cookbook_dir
-    	attr_reader :export_root
-    	attr_reader :export_path
+      attr_reader :export_root
+      attr_reader :export_path
       attr_reader :policyfile_lock_file
 
       def initialize(policyfile_lock_file = nil, cookbook_dir = nil)
-      	@export_root = Dir.mktmpdir('ramsay-')
-      	# We need the target dir named the same as the source dir so that `chef` commands
-      	# work as happily programatically as they would via the command line.
-      	# This is because the commands assume they're being run from within a cookbook
-      	# directory.
-      	@export_path = File.join(export_root, cookbook_dir)
-				@chef_config_file = "#{export_path}/.chef/config.rb"
+        @export_root = Dir.mktmpdir('ramsay-')
+        # We need the target dir named the same as the source dir so that `chef` commands
+        # work as happily programatically as they would via the command line.
+        # This is because the commands assume they're being run from within a cookbook
+        # directory.
+        @export_path = File.join(export_root, cookbook_dir)
+        @chef_config_file = "#{export_path}/.chef/config.rb"
       end
 
-			def fake_client_key
+      def fake_client_key
         "#{export_path}/ramsay.pem"
-			end
+      end
 
       def cp_fake_client_key
         # Create a fake client cert based on a dummy cert we have laying around.
@@ -40,15 +40,15 @@ module Ramsay
         end
       end
 
-	    # Export the cookbook and prepare a chef-zero-compatible directory.
-	    # We'll use this as a temporary launch pad for things, as needed, akin
-	    # to test-kitchen's sandbox.
+      # Export the cookbook and prepare a chef-zero-compatible directory.
+      # We'll use this as a temporary launch pad for things, as needed, akin
+      # to test-kitchen's sandbox.
       def export
-				export_service = ChefDK::PolicyfileServices::ExportRepo.new(
-				  policyfile: policyfile_lock_file,
-				  export_dir: export_path
-				)
-				export_service.run
+        export_service = ChefDK::PolicyfileServices::ExportRepo.new(
+          policyfile: policyfile_lock_file,
+          export_dir: export_path
+        )
+        export_service.run
         cp_fake_client_key
         update_chef_config
       end

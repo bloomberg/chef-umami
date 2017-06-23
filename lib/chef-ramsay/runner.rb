@@ -75,26 +75,26 @@ module Ramsay
       end
 
       # TODO: The below code with go into it's own class.
-			puts "\n\n\n\n\n\n"
-			recipe_resources.each do |recipe, resources|
-			  (cookbook, recipe) = recipe.split('::')
-			  puts "# spec/unit/#{cookbook}/#{recipe}_spec.rb"
-			  puts
-			  puts "require 'chefspec'"
-			  puts
-			  puts "describe '#{recipe}' do"
-			  puts "  let(:chef_run) { ChefSpec::ServerRunner.converge(described_recipe) }"
-			  resources.each do |resource|
-			    puts "  "
-			    puts "  it '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"
-			    puts "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
-			    state_attrs = resource.state.keys.map {|attr| ":#{attr}"}.join(', ')
-			    puts "    expect(resource).to have_state_attrs(#{state_attrs})"
-			    puts "  end"
-			    #p "#{resource.name}: #{resource.state}" # We need this info to generate tests re: resource state.
-			  end
-			  puts "end"
-			end
+      puts "\n\n\n\n\n\n"
+      recipe_resources.each do |recipe, resources|
+        (cookbook, recipe) = recipe.split('::')
+        puts "# spec/unit/#{cookbook}/#{recipe}_spec.rb"
+        puts
+        puts "require 'chefspec'"
+        puts
+        puts "describe '#{recipe}' do"
+        puts "  let(:chef_run) { ChefSpec::ServerRunner.converge(described_recipe) }"
+        resources.each do |resource|
+          puts "  "
+          puts "  it '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"
+          puts "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
+          state_attrs = resource.state.keys.map {|attr| ":#{attr}"}.join(', ')
+          puts "    expect(resource).to have_state_attrs(#{state_attrs})"
+          puts "  end"
+          #p "#{resource.name}: #{resource.state}" # We need this info to generate tests re: resource state.
+        end
+        puts "end"
+      end
 
     end
 
