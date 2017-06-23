@@ -5,6 +5,7 @@ require 'chef-ramsay/logger'
 require 'chef-ramsay/server'
 require 'chef-ramsay/policyfile/exporter'
 require 'chef-ramsay/policyfile/uploader'
+require 'chef-ramsay/test/unit'
 
 module Ramsay
   class Runner
@@ -58,6 +59,8 @@ module Ramsay
       chef_zero_server.start
       uploader.upload
       chef_client.prep
+      unit_tester = Ramsay::Test::Unit.new
+      p unit_tester
       recipe_resources = {}
       chef_client.resource_collection.each do |resource|
         canonical_recipe = "#{resource.cookbook_name}::#{resource.recipe_name}"
