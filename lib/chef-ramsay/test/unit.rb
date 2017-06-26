@@ -16,12 +16,12 @@ module Ramsay
         "chefspec"
       end
 
-      def preamble(recipe = '')
+      def preamble(cookbook = '', recipe = '')
     	  "# #{test_root}/#{recipe}_spec.rb\n" \
     	  "\n" \
     	  "require '#{framework}'\n" \
     	  "\n" \
-    	  "describe '#{recipe}' do\n" \
+    	  "describe '#{cookbook}::#{recipe}' do\n" \
     	  "  let(:chef_run) { ChefSpec::ServerRunner.converge(described_recipe) }"
       end
 
@@ -39,7 +39,7 @@ module Ramsay
       	  (cookbook, recipe) = canonical_recipe.split('::')
           # Only write unit tests for the cookbook we're in.
 					next unless cookbook == tested_cookbook
-          puts preamble(recipe)
+          puts preamble(cookbook, recipe)
         	resources.each do |resource|
 						puts write_test(resource)
         	end

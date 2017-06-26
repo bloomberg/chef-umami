@@ -6,6 +6,7 @@ require 'chef-ramsay/server'
 require 'chef-ramsay/policyfile/exporter'
 require 'chef-ramsay/policyfile/uploader'
 require 'chef-ramsay/test/unit'
+require 'chef-ramsay/test/integration'
 
 module Ramsay
   class Runner
@@ -60,6 +61,7 @@ module Ramsay
       uploader.upload
       chef_client.compile
       unit_tester = Ramsay::Test::Unit.new
+      integration_tester = Ramsay::Test::Integration.new
       # Build a hash of all the recipes' resources, keyed by the canonical
       # name of the recipe (i.e. ohai::default).
       recipe_resources = {}
@@ -73,6 +75,7 @@ module Ramsay
       end
 
       unit_tester.generate(recipe_resources)
+      integration_tester.generate(recipe_resources)
 
     end
 
