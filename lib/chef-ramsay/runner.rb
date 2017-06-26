@@ -58,9 +58,10 @@ module Ramsay
       Chef::Config.from_file("#{exporter.chef_config_file}")
       chef_zero_server.start
       uploader.upload
-      chef_client.prep
+      chef_client.compile
       unit_tester = Ramsay::Test::Unit.new
-      p unit_tester
+      # Build a hash of all the recipes' resources, keyed by the canonical
+      # name of the recipe (i.e. ohai::default).
       recipe_resources = {}
       chef_client.resource_collection.each do |resource|
         canonical_recipe = "#{resource.cookbook_name}::#{resource.recipe_name}"
@@ -69,35 +70,9 @@ module Ramsay
         else
           recipe_resources[canonical_recipe] = [resource]
         end
-        #puts "\nRESOURCE: '#{resource.to_s}'"
-        #puts "NAME:     '#{resource.name}'"
-        #puts "TYPE:     '#{resource.class}'"
-        #puts "ACTION:   '#{resource.action.to_s}'"
-        #puts "FROM:     '#{resource.cookbook_name}::#{resource.recipe_name}'"
-        #p resource.state
       end
 
-      # TODO: The below code with go into it's own class.
-      puts "\n\n\n\n\n\n"
-      recipe_resources.each do |recipe, resources|
-        (cookbook, recipe) = recipe.split('::')
-        puts "# spec/unit/#{cookbook}/#{recipe}_spec.rb"
-        puts
-        puts "require 'chefspec'"
-        puts
-        puts "describe '#{recipe}' do"
-        puts "  let(:chef_run) { ChefSpec::ServerRunner.converge(described_recipe) }"
-        resources.each do |resource|
-          puts "  "
-          puts "  it '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"
-          puts "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
-          state_attrs = resource.state.keys.map {|attr| ":#{attr}"}.join(', ')
-          puts "    expect(resource).to have_state_attrs(#{state_attrs})"
-          puts "  end"
-          #p "#{resource.name}: #{resource.state}" # We need this info to generate tests re: resource state.
-        end
-        puts "end"
-      end
+      unit_tester.generate(recipe_resources)
 
     end
 

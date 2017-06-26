@@ -12,12 +12,17 @@ module Ramsay
       @client ||= Chef::Client.new
     end
 
-    # Get node information, including node_name, required to get/build node info;
-    # test afterward with `client.node_name`
+    # Perform the steps required prior to compiling resources, including
+    # running Ohai and building up the node object.
     def prep
       client.run_ohai
       client.load_node # from the server
       client.build_node
+    end
+
+    # Execute the compile phase of a Chef client run.
+    def compile
+      prep
       client.setup_run_context
     end
 
