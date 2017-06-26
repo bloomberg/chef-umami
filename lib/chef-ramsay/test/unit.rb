@@ -17,21 +17,21 @@ module Ramsay
       end
 
       def preamble(recipe = '')
-    	  puts "# #{test_root}/#{recipe}_spec.rb"
-    	  puts
-    	  puts "require '#{framework}'"
-    	  puts
-    	  puts "describe '#{recipe}' do"
-    	  puts "  let(:chef_run) { ChefSpec::ServerRunner.converge(described_recipe) }"
+    	  "# #{test_root}/#{recipe}_spec.rb\n" \
+    	  "\n" \
+    	  "require '#{framework}'\n" \
+    	  "\n" \
+    	  "describe '#{recipe}' do\n" \
+    	  "  let(:chef_run) { ChefSpec::ServerRunner.converge(described_recipe) }"
       end
 
 			def write_test(resource = nil)
-        puts 
-        puts "  it '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"
-        puts "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
         state_attrs = resource.state.keys.map {|attr| ":#{attr}"}.join(', ')
-        puts "    expect(resource).to have_state_attrs(#{state_attrs})"
-        puts "  end"
+        "\n" \
+        "  it '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do\n" \
+        "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')\n" \
+        "    expect(resource).to have_state_attrs(#{state_attrs})\n" \
+        "  end\n"
 			end
 
       def generate(recipe_resources = {})
@@ -39,9 +39,9 @@ module Ramsay
       	  (cookbook, recipe) = canonical_recipe.split('::')
           # Only write unit tests for the cookbook we're in.
 					next unless cookbook == tested_cookbook
-          preamble(recipe)
+          puts preamble(recipe)
         	resources.each do |resource|
-						write_test(resource)
+						puts write_test(resource)
         	end
         	puts "end" # TODO: Make #footer def (or similar)
 				end
