@@ -32,7 +32,18 @@ module Ramsay
             version = `uname -r`.chomp # Release level (i.e. 5.11).
             {platform: 'solaris', version: version}
           when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-            version = '2012R2' # FIXME: Actually try and determine version.
+            # Refer to https://en.wikipedia.org/wiki/Ver_(command)
+            win_version = `ver`.chomp.split("Version ")[1].gsub(/]/, '')
+            case win_version
+            when /^6.1.7/
+              version = '2008R2' # Also Win 7
+            when /^6.2/
+              version = '2012' # Also Win 8
+            when /^6.3/
+              version = '2012R2' # Also Win 8.1
+            when /^(6.4|10)/
+              version = '10'
+            end
             {platform: 'windows', version: version}
           else
             # Default to something reasonably sane.

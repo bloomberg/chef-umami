@@ -55,10 +55,13 @@ module Ramsay
 
     def run
       validate_lock_file!
+      puts "\nExporting the policy, related cookbooks, and a valid client configuration..."
       exporter.export
       Chef::Config.from_file("#{exporter.chef_config_file}")
       chef_zero_server.start
+      puts "\nUploading the policy and related cookbooks..."
       uploader.upload
+      puts "\nExecuting chef-client compile phase..."
       chef_client.compile
       unit_tester = Ramsay::Test::Unit.new
       integration_tester = Ramsay::Test::Integration.new
@@ -74,7 +77,9 @@ module Ramsay
         end
       end
 
+      puts "\nGenerating a set of unit tests..."
       unit_tester.generate(recipe_resources)
+      puts "\nGenerating a set of integration tests..."
       integration_tester.generate(recipe_resources)
 
     end
