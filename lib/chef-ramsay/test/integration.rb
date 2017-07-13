@@ -1,11 +1,13 @@
 require 'chef-ramsay/test'
 require 'chef-ramsay/helpers/serverspec'
+require 'chef-ramsay/helpers/filetools'
 
 module Ramsay
   class Test
     class Integration < Ramsay::Test
 
       include Ramsay::Helper::ServerSpec
+      include Ramsay::Helper::FileTools
 
       attr_reader :test_root
       attr_reader :tested_cookbook # This cookbook.
@@ -19,11 +21,14 @@ module Ramsay
         "serverspec"
       end
 
+      def test_file(recipe = '')
+        "#{test_root}/#{recipe}_spec.rb"
+      end
+
       def preamble(cookbook = '', recipe = '')
-        "# #{test_root}/#{cookbook}/#{recipe}_spec.rb\n" \
+        "# #{test_file(recipe)}\n" \
         "\n" \
-        "require '#{framework}'\n" \
-        "\n" \
+        "require '#{framework}'"
       end
 
       # Call on the apprpriate method from the Ramsay::Helper::ServerSpec
@@ -33,13 +38,23 @@ module Ramsay
       end
 
       def generate(recipe_resources = {})
+        test_files_written = []
         recipe_resources.each do |canonical_recipe, resources|
           (cookbook, recipe) = canonical_recipe.split('::')
-          # Only write unit tests for the cookbook we're in.
+          # Only write unit tests for the cookbook we're in. TODO: Strike this.
           next unless cookbook == tested_cookbook
-          puts preamble(cookbook, recipe)
+          content = [preamble(cookbook, recipe)]
           resources.each do |resource|
-            puts write_test(resource)
+            content << write_test(resource)
+          end
+          test_file_name = test_file(recipe)
+          write_file(test_file_name, content.join("\n"))
+          test_files_written << test_file_name
+        end
+        unless test_files_written.empty?
+          puts "Wrote the following integration tests:"
+          test_files_written.each do |f|
+            puts "\t#{f}"
           end
         end
       end

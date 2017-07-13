@@ -1,11 +1,13 @@
 require 'chef-ramsay/test'
 require 'chef-ramsay/helpers/os'
+require 'chef-ramsay/helpers/filetools'
 
 module Ramsay
   class Test
     class Unit < Ramsay::Test
 
       include Ramsay::Helper::OS
+      include Ramsay::Helper::FileTools
 
       attr_reader :test_root
       attr_reader :tested_cookbook # This cookbook.
@@ -19,8 +21,12 @@ module Ramsay
         "chefspec"
       end
 
+      def test_file(recipe = '')
+        "#{test_root}/#{recipe}_spec.rb"
+      end
+
       def preamble(cookbook = '', recipe = '')
-        "# #{test_root}/#{recipe}_spec.rb\n" \
+        "# #{test_file(recipe)}\n" \
         "\n" \
         "require '#{framework}'\n" \
         "\n" \
@@ -45,16 +51,28 @@ module Ramsay
       end
 
       def generate(recipe_resources = {})
+        test_files_written = []
         recipe_resources.each do |canonical_recipe, resources|
           (cookbook, recipe) = canonical_recipe.split('::')
           # Only write unit tests for the cookbook we're in.
           next unless cookbook == tested_cookbook
-          puts preamble(cookbook, recipe)
+          content = [preamble]
           resources.each do |resource|
-            puts write_test(resource)
+            content << write_test(resource)
           end
-          puts "end" # TODO: Make #footer def (or similar)
+          content << "end"
+          test_file_name = test_file(recipe)
+          write_file(test_file_name, content.join("\n"))
+          test_files_written << test_file_name
         end
+
+        unless test_files_written.empty?
+          puts "Wrote the following unit test files:"
+          test_files_written.each do |f|
+            puts "\t#{f}"
+          end
+        end
+
       end
 
     end
