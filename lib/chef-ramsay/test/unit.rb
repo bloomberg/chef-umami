@@ -31,7 +31,7 @@ module Ramsay
         "require '#{framework}'\n" \
         "\n" \
         "describe '#{cookbook}::#{recipe}' do\n" \
-        "  let(:chef_run) { ChefSpec::ServerRunner.new(platform: '#{os[:platform]}', version: '#{os[:version]}').converge(described_recipe) }"
+        "let(:chef_run) { ChefSpec::ServerRunner.new(platform: '#{os[:platform]}', version: '#{os[:version]}').converge(described_recipe) }"
       end
 
       def write_test(resource = nil)
@@ -40,13 +40,13 @@ module Ramsay
           next if value.nil? or value.empty?
           state_attrs << "#{attr}: '#{value}'"
         end
-        test_output = ["\n  it '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"]
+        test_output = ["\nit '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"]
         if state_attrs.empty?
-          test_output << "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
+          test_output << "expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
         else
-          test_output << "    expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}').with(#{state_attrs.join(', ')})"
+          test_output << "expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}').with(#{state_attrs.join(', ')})"
         end
-        test_output << "  end\n"
+        test_output << "end\n"
         test_output.join("\n")
       end
 
@@ -56,7 +56,7 @@ module Ramsay
           (cookbook, recipe) = canonical_recipe.split('::')
           # Only write unit tests for the cookbook we're in.
           next unless cookbook == tested_cookbook
-          content = [preamble]
+          content = [preamble(cookbook, recipe)]
           resources.each do |resource|
             content << write_test(resource)
           end
@@ -66,6 +66,8 @@ module Ramsay
           write_file(test_file_name, test_file_content)
           test_files_written << test_file_name
         end
+
+        enforce_styling(test_root)
 
         unless test_files_written.empty?
           puts "Wrote the following unit test files:"

@@ -9,15 +9,15 @@ module Ramsay
       def test_directory(resource)
         # directory tests are really file tests.
         test = ["describe file('#{resource.name}') do"]
-        test << "  it { should be_directory }"
+        test << "it { should be_directory }"
         if !resource.group.nil? && !resource.group.empty?
-          test << "  it { should be_grouped_into '#{resource.group}' }"
+          test << "it { should be_grouped_into '#{resource.group}' }"
         end
         if !resource.owner.nil? && !resource.owner.empty?
-          test << "  it { should be_owned_by '#{resource.owner}' }"
+          test << "it { should be_owned_by '#{resource.owner}' }"
         end
         if !resource.mode.nil? && !resource.mode.empty?
-          test << "  it { should be_mode #{resource.mode} }"
+          test << "it { should be_mode #{resource.mode} }"
         end
         test << "end"
         test.join("\n")
@@ -25,7 +25,7 @@ module Ramsay
 
       def test_group(resource)
         test = [desciption(resource)]
-        test << "  it { should exist }"
+        test << "it { should exist }"
         test << "end"
         test.join("\n")
       end
@@ -33,9 +33,9 @@ module Ramsay
       def test_package(resource)
         test = [desciption(resource)]
         if !resource.version.nil? && !resource.version.empty?
-          test << "  it { should be_installed.with_version('#{resource.version}') }"
+          test << "it { should be_installed.with_version('#{resource.version}') }"
         else
-          test << "  it { should be_installed }"
+          test << "it { should be_installed }"
         end
         test << "end"
         test.join("\n")
@@ -43,12 +43,12 @@ module Ramsay
 
       def test_user(resource)
         test = [desciption(resource)]
-        test << "  it { should exist }"
+        test << "it { should exist }"
         if !resource.gid.nil? && !resource.gid.empty?
-          test << "  it { should belong_to_primary_group '#{resource.gid}' }"
+          test << "it { should belong_to_primary_group '#{resource.gid}' }"
         end
         if !resource.home.nil? && !resource.home.empty?
-          test << "  it { should have_home_directory '#{resource.home}' }"
+          test << "it { should have_home_directory '#{resource.home}' }"
         end
         test << "end"
         test.join("\n")

@@ -52,12 +52,16 @@ module Ramsay
           write_file(test_file_name, test_file_content)
           test_files_written << test_file_name
         end
+
+        enforce_styling(test_root)
+
         unless test_files_written.empty?
           puts "Wrote the following integration tests:"
           test_files_written.each do |f|
             puts "\t#{f}"
           end
         end
+
       end
 
     end

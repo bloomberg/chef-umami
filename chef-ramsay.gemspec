@@ -18,5 +18,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "chef", "~> 12.19"
   gem.add_dependency "chef-dk", "~> 1.4"
+  gem.add_dependency "rubocop", "~> 0.47"
 
 end
