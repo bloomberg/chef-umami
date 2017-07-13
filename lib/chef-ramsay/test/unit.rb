@@ -13,7 +13,7 @@ module Ramsay
       attr_reader :tested_cookbook # This cookbook.
       def initialize
         super
-        @test_root = File.join(self.root_dir, 'unit', 'ramsay', 'recipes')
+        @test_root = File.join(self.root_dir, 'ramsay', 'unit', 'recipes')
         @tested_cookbook = File.basename(Dir.pwd)
       end
 
@@ -62,7 +62,8 @@ module Ramsay
           end
           content << "end"
           test_file_name = test_file(recipe)
-          write_file(test_file_name, content.join("\n"))
+          test_file_content = content.join("\n") + "\n"
+          write_file(test_file_name, test_file_content)
           test_files_written << test_file_name
         end
 
