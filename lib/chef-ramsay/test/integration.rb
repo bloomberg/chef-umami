@@ -21,14 +21,15 @@ module Ramsay
         "serverspec"
       end
 
-      def test_file(recipe = '')
-        "#{test_root}/#{recipe}_spec.rb"
+      def test_file(cookbook = '', recipe = '')
+        "#{test_root}/#{cookbook}_#{recipe}_spec.rb"
       end
 
       def preamble(cookbook = '', recipe = '')
-        "# #{test_file(recipe)}\n" \
+        "# #{test_file(cookbook, recipe)}\n" \
         "\n" \
-        "require '#{framework}'"
+        "require '#{framework}'\n" \
+        "set :backend, #{backend}"
       end
 
       # Call on the apprpriate method from the Ramsay::Helper::ServerSpec
@@ -47,7 +48,7 @@ module Ramsay
           resources.each do |resource|
             content << write_test(resource)
           end
-          test_file_name = test_file(recipe)
+          test_file_name = test_file(cookbook, recipe)
           test_file_content = content.join("\n") + "\n"
           write_file(test_file_name, test_file_content)
           test_files_written << test_file_name

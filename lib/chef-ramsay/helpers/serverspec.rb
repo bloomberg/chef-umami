@@ -2,6 +2,13 @@ module Ramsay
   module Helper
     module ServerSpec
 
+      # ServerSpec supports the following backends:
+      #  :exec - Local execution. Good for Test Kitchen
+      #  :ssh  - Remote execution via SSH.
+      def backend
+        :exec.inspect
+      end
+
       def desciption(resource)
         "describe #{resource.declared_type}('#{resource.name}') do"
       end
@@ -17,7 +24,7 @@ module Ramsay
           test << "it { should be_owned_by '#{resource.owner}' }"
         end
         if !resource.mode.nil? && !resource.mode.empty?
-          test << "it { should be_mode #{resource.mode} }"
+          test << "it { should be_mode '#{resource.mode}' }"
         end
         test << "end"
         test.join("\n")
