@@ -67,8 +67,6 @@ module Ramsay
       # Define Chef::Config['config_file'] lest Ohai complain.
       Chef::Config['config_file'] = exporter.chef_config_file
       chef_client.compile
-      unit_tester = Ramsay::Test::Unit.new
-      integration_tester = Ramsay::Test::Integration.new
       # Build a hash of all the recipes' resources, keyed by the canonical
       # name of the recipe (i.e. ohai::default).
       recipe_resources = {}
@@ -81,9 +79,17 @@ module Ramsay
         end
       end
 
+      # Remove the temporary directory using a naive guard to ensure we're
+      # deleting what we expect.
+      re_export_path = Regexp.new('/tmp/ramsay')
+      FileUtils.rm_rf(exporter.export_root) if exporter.export_root.match(re_export_path)
+
       puts "\nGenerating a set of unit tests..."
+      unit_tester = Ramsay::Test::Unit.new
       unit_tester.generate(recipe_resources)
+
       puts "\nGenerating a set of integration tests..."
+      integration_tester = Ramsay::Test::Integration.new
       integration_tester.generate(recipe_resources)
 
     end

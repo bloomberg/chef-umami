@@ -57,8 +57,8 @@ module Ramsay
       alias_method :test_remote_directory, :test_directory
 
       def test_file(resource)
-        test = [desciption(resource)]
-        test << "it { should be_directory }"
+        test = ["describe file('#{resource.name}') do"]
+        test << "it { should be_file }"
         if !resource.group.nil? && !resource.group.empty?
           test << "it { should be_grouped_into '#{resource.group}' }"
         end
