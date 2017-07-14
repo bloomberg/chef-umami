@@ -38,6 +38,15 @@ module Ramsay
         "\n" + send("test_#{resource.declared_type}", resource)
       end
 
+      def method_missing(m, *args, &block)
+        case m
+          when /^test_/
+            "# #{m} is not currently defined. Stay tuned for updates."
+          else
+            raise NoMethodError
+        end
+      end
+
       def generate(recipe_resources = {})
         test_files_written = []
         recipe_resources.each do |canonical_recipe, resources|
