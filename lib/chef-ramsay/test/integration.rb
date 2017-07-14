@@ -35,6 +35,10 @@ module Ramsay
       # Call on the apprpriate method from the Ramsay::Helper::ServerSpec
       # module to generate our test.
       def write_test(resource = nil)
+        if resource.action.is_a? Array
+          return if resource.action.include?(:delete)
+        end
+        return if resource.action == :delete
         "\n" + send("test_#{resource.declared_type}", resource)
       end
 
