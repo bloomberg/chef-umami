@@ -15,10 +15,12 @@ module Ramsay
 
     attr_reader :cookbook_dir
     attr_reader :policyfile_lock_file
+    attr_reader :policyfile
     # TODO: Build the ability to specify a custom policy lock file name.
-    def initialize(policyfile_lock_file = nil)
+    def initialize(policyfile_lock_file = nil, policyfile = nil)
       @cookbook_dir = Dir.pwd
       @policyfile_lock_file = 'Policyfile.lock.json'
+      @policyfile = policyfile || 'Policyfile.rb'
       @exporter = exporter
       @chef_zero_server = chef_zero_server
       # If we load the uploader or client now, they won't see the updated
@@ -38,7 +40,7 @@ module Ramsay
     end
 
     def exporter
-      @exporter ||= Ramsay::Policyfile::Exporter.new(policyfile_lock_file, cookbook_dir)
+      @exporter ||= Ramsay::Policyfile::Exporter.new(policyfile_lock_file, cookbook_dir, policyfile)
     end
 
     def uploader
@@ -62,6 +64,8 @@ module Ramsay
       puts "\nUploading the policy and related cookbooks..."
       uploader.upload
       puts "\nExecuting chef-client compile phase..."
+      # Define Chef::Config['config_file'] lest Ohai complain.
+      Chef::Config['config_file'] = exporter.chef_config_file
       chef_client.compile
       unit_tester = Ramsay::Test::Unit.new
       integration_tester = Ramsay::Test::Integration.new

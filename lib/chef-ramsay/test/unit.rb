@@ -37,14 +37,20 @@ module Ramsay
       def write_test(resource = nil)
         state_attrs = [] # Attribute hash to be used with #with()
         resource.state.each do |attr, value|
-          next if value.nil? or value.empty?
+          next if value.nil? or (value.respond_to?(:empty) and value.empty?)
           state_attrs << "#{attr}: '#{value}'"
         end
-        test_output = ["\nit '#{resource.action.first}s #{resource.declared_type} \"#{resource.name}\"' do"]
-        if state_attrs.empty?
-          test_output << "expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}')"
+        action = ''
+        if resource.action.is_a? Array
+          action = resource.action.first
         else
-          test_output << "expect(chef_run).to #{resource.action.first}_#{resource.declared_type}('#{resource.name}').with(#{state_attrs.join(', ')})"
+          action = resource.action
+        end
+        test_output = ["\nit '#{action}s #{resource.declared_type} \"#{resource.name}\"' do"]
+        if state_attrs.empty?
+          test_output << "expect(chef_run).to #{action}_#{resource.declared_type}('#{resource.name}')"
+        else
+          test_output << "expect(chef_run).to #{action}_#{resource.declared_type}('#{resource.name}').with(#{state_attrs.join(', ')})"
         end
         test_output << "end\n"
         test_output.join("\n")
