@@ -29,6 +29,7 @@ module Ramsay
         "# #{test_file(recipe)}\n" \
         "\n" \
         "require '#{framework}'\n" \
+        "require '#{framework}/policyfile'\n" \
         "\n" \
         "describe '#{cookbook}::#{recipe}' do\n" \
         "let(:chef_run) { ChefSpec::ServerRunner.new(platform: '#{os[:platform]}', version: '#{os[:version]}').converge(described_recipe) }"
