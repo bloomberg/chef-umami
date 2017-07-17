@@ -14,18 +14,25 @@ module Ramsay
       # use to describe the resource, rather than the (possibly) custom value
       # returned by the #name method.
       def desciption(resource)
-        "describe #{resource.declared_type}('#{resource.name}') do"
+        case resource.declared_type
+        when /package/
+          "describe #{resource.declared_type}('#{resource.package_name}') do"
+        else
+          "describe #{resource.declared_type}('#{resource.name}') do"
+        end
       end
 
       # All test methods should follow the naming convention 'test_<resource type>'
       #  1. The methods should build up an array of lines defining the test.
       #  1. The first element should be the result of a call to
       #  #description(resource) except in cases where it is not appropriate
-      #  (i.e. testing a directory resource requires #  defining a file test).
+      #  (i.e. testing a directory resource requires defining a file test).
       #  2. The method should should return a string joined by newlines.
       #
       #def test_wutang(resource)
       #  test = [desciption(resource)]
+      #  test << "it { should be_financially_sound }"
+      #  test << "it { should be_diverisified }"
       #  test.join("\n")
       #end
 
