@@ -28,30 +28,29 @@ All test files are written to `spec/ramsay/`. If my cookbook is named `wutang`
 and I have the following recipes:
 
 ```
-    ...
-    ├── recipes/
-    │   ├── bonds.rb
-    │   ├── default.rb
-    │   ├── financial.rb
-    │   └── stocks.rb
+├── recipes/
+│   ├── bonds.rb
+│   ├── default.rb
+│   ├── financial.rb
+│   └── stocks.rb
 ```
 
 `ramsay` will write tests as follows:
 
 ```
-    ├── spec/
-    │   └── ramsay/
-    │       ├── integration/
-    │       │   ├── wutang_bonds_spec.rb
-    │       │   ├── wutang_default_spec.rb
-    │       │   ├── wutang_financial_spec.rb
-    │       │   └── wutang_stocks_spec.rb
-    │       └── unit/
-    │           └── recipes/
-    │               ├── bonds_spec.rb
-    │               ├── default_spec.rb
-    │               ├── financial_spec.rb
-    │               └── stocks_spec.rb
+├── spec/
+│   └── ramsay/
+│       ├── integration/
+│       │   ├── wutang_bonds_spec.rb
+│       │   ├── wutang_default_spec.rb
+│       │   ├── wutang_financial_spec.rb
+│       │   └── wutang_stocks_spec.rb
+│       └── unit/
+│           └── recipes/
+│               ├── bonds_spec.rb
+│               ├── default_spec.rb
+│               ├── financial_spec.rb
+│               └── stocks_spec.rb
 ```
 
 ## How do I get it?
@@ -70,21 +69,21 @@ When it is finished, it will display the paths to the test files it has
 written:
 
 ```
-    Generating a set of unit tests...
-    Running Rubocop over 'spec/ramsay/unit/recipes' to enforce styling...
-    Wrote the following unit test files:
-        spec/ramsay/unit/recipes/bonds_spec.rb
-        spec/ramsay/unit/recipes/default_spec.rb
-        spec/ramsay/unit/recipes/financial_spec.rb
-        spec/ramsay/unit/recipes/stocks_spec.rb
-    
-    Generating a set of integration tests...
-    Running Rubocop over 'spec/ramsay/integration' to enforce styling...
-    Wrote the following integration tests:
-        spec/ramsay/integration/wutang_bonds_spec.rb
-        spec/ramsay/integration/wutang_default_spec.rb
-        spec/ramsay/integration/wutang_financial_spec.rb
-        spec/ramsay/integration/wutang_stocks_spec.rb
+Generating a set of unit tests...
+Running Rubocop over 'spec/ramsay/unit/recipes' to enforce styling...
+Wrote the following unit test files:
+    spec/ramsay/unit/recipes/bonds_spec.rb
+    spec/ramsay/unit/recipes/default_spec.rb
+    spec/ramsay/unit/recipes/financial_spec.rb
+    spec/ramsay/unit/recipes/stocks_spec.rb
+
+Generating a set of integration tests...
+Running Rubocop over 'spec/ramsay/integration' to enforce styling...
+Wrote the following integration tests:
+    spec/ramsay/integration/wutang_bonds_spec.rb
+    spec/ramsay/integration/wutang_default_spec.rb
+    spec/ramsay/integration/wutang_financial_spec.rb
+    spec/ramsay/integration/wutang_stocks_spec.rb
 ```
 
 ## Features
