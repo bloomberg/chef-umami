@@ -6,8 +6,8 @@ policies, making it easier to do the right thing and test code.
 ## How does it Work?
 
 `ramsay` loads up one or more cookbooks in a `chef-zero` instance, executes the
-compile phase of a `chef-client`, and reads the run context to get a list of the
-resources that will be managed.
+compile phase of a `chef-client` run, and reads the run context to get a list
+of the resources that will be managed.
 
 **NOTE**: `ramsay` does not perform convergence.
 
