@@ -9,6 +9,10 @@ module Ramsay
         :exec.inspect
       end
 
+      # TODO: Write a set of methods to aid in describing the resource.
+      # Example: Package resources have a method named #package_name we should
+      # use to describe the resource, rather than the (possibly) custom value
+      # returned by the #name method.
       def desciption(resource)
         "describe #{resource.declared_type}('#{resource.name}') do"
       end
@@ -38,32 +42,24 @@ module Ramsay
         test.join("\n")
       end
 
-      def test_directory(resource)
-        # directory tests are really file tests.
-        test = ["describe file('#{resource.name}') do"]
-        test << "it { should be_directory }"
-        if !resource.group.nil? && !resource.group.empty?
-          test << "it { should be_grouped_into '#{resource.group}' }"
-        end
-        if !resource.owner.nil? && !resource.owner.empty?
-          test << "it { should be_owned_by '#{resource.owner}' }"
-        end
-        if !resource.mode.nil? && !resource.mode.empty?
-          test << "it { should be_mode '#{resource.mode}' }"
-        end
-        test << "end"
-        test.join("\n")
-      end
-      alias_method :test_remote_directory, :test_directory
-
       def test_file(resource)
-        test = ["describe file('#{resource.name}') do"]
-        test << "it { should be_file }"
-        if !resource.group.nil? && !resource.group.empty?
-          test << "it { should be_grouped_into '#{resource.group}' }"
+        test = ["describe file('#{resource.path}') do"]
+        if resource.declared_type =~ /directory/
+          test << "it { should be_directory }"
+        else
+          test << "it { should be_file }"
         end
-        if !resource.owner.nil? && !resource.owner.empty?
-          test << "it { should be_owned_by '#{resource.owner}' }"
+        # Sometimes we see GIDs instead of group names.
+        if !resource.group.nil?
+          unless resource.group.is_a?(String) && resource.group.empty?
+            test << "it { should be_grouped_into '#{resource.group}' }"
+          end
+        end
+        # Guard for UIDs versus usernames as well.
+        if !resource.owner.nil?
+          unless resource.owner.is_a?(String) && resource.owner.empty?
+            test << "it { should be_owned_by '#{resource.owner}' }"
+          end
         end
         if !resource.mode.nil? && !resource.mode.empty?
           test << "it { should be_mode '#{resource.mode}' }"
@@ -72,7 +68,9 @@ module Ramsay
         test.join("\n")
       end
       alias_method :test_cookbook_file, :test_file
+      alias_method :test_directory, :test_file
       alias_method :test_remote_file, :test_file
+      alias_method :test_remote_directory, :test_file
       alias_method :test_template, :test_file
 
       def test_group(resource)
