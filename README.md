@@ -61,7 +61,7 @@ Install `chef-ramsay` from your favorite `gem` source via:
 
 ## How do I use it?
 
-From the top level of your cookbook, run `ramsay`. It will
+From the top level of your cookbook, run `ramsay`:
 
 `chef exec ramsay`
 
@@ -100,6 +100,12 @@ does its best to detect the OS it's being called on.
 they've been written. This makes it very easy to add testing methods to `ramsay`
 without worrying about what the resulting indentation will be.
 
+## Dependencies and Assumptions
+
+`ramsay` depends on ChefDK to do the bulk of the work resolving cookbooks and
+their dependencies. Further, `ramsay` assumes you're using Policyfile to manage
+your nodes' run list.
+
 ## Caveats
 
 `ramsay` is still in early and rapid development. Expect to see lots of activity.
@@ -115,3 +121,15 @@ anything, you want to use.
 development cycle. It tries its best to provide a useful set of tests that you
 can build on.
 
+## Inspiration and Thanks
+
+This project came to be largely out of fear of having to write a lot of test
+code from scratch where none had previously existed. The idea of starting from
+nothing seemed so daunting that it's likely no on would ever get started. I
+wanted to give Chef developers a means to expedite writing tests. After all,
+it's much easier to modify code than it is to write it in the first place.
+
+`ramsay` is the product of reearch into various projects' code, such as
+Chef, ChefDK, and Test Kitchen. I am grateful to everyone that has contributed
+to those projects. `ramsay` borrows some patterns from those projects and, in
+some cases, bits of code.
