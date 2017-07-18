@@ -86,6 +86,34 @@ Wrote the following integration tests:
     spec/ramsay/integration/wutang_stocks_spec.rb
 ```
 
+### Running Unit Tests
+
+Running one or more unit tests should be as easy as calling `rspec` on a given
+test file, like so:
+
+`chef exec rspec spec/ramsay/unit/recipes/default_spec.rb`
+
+### Running Integration Tests
+
+It's preferred to use `kitchen verify` to execute all integration tests.
+Teach `kitchen` to run `ramsay`'s tests by updating `.kitchen.yml`. Specify
+the appropriate `verifier` (`inspec` should mostly support Serverspec tests)
+and, if needed, direct `kitchen` where the tests are located:
+
+```
+verifier:
+  name: inspec
+
+suites:
+  - name: default
+    provisioner:
+      policyfile: Policyfile.rb
+    ...
+    verifier:
+      inspec_tests:
+        - path: spec/ramsay/integration
+```
+
 ## Features
 
 ### OS Detection
