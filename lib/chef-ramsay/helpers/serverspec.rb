@@ -9,17 +9,15 @@ module Ramsay
         :exec.inspect
       end
 
-      # TODO: Write a set of methods to aid in describing the resource.
-      # Example: Package resources have a method named #package_name we should
-      # use to describe the resource, rather than the (possibly) custom value
-      # returned by the #name method.
+      # Call on a resource's #identity method to help describe the resource.
+      # This saves us from having to know/code the identity attribute for each
+      # resource (i.e. File is :path, User is :username, etc).
       def desciption(resource)
-        case resource.declared_type
-        when /package/
-          "describe #{resource.declared_type}('#{resource.package_name}') do"
-        else
-          "describe #{resource.declared_type}('#{resource.name}') do"
+        identity = resource.identity
+        if identity.is_a? Hash # #identity could return a Hash. Take the first value.
+          identity = identity.values.first
         end
+        "describe #{resource.declared_type}('#{identity}') do"
       end
 
       # All test methods should follow the naming convention 'test_<resource type>'
