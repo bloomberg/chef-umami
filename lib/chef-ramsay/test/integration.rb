@@ -55,8 +55,6 @@ module Ramsay
         test_files_written = []
         recipe_resources.each do |canonical_recipe, resources|
           (cookbook, recipe) = canonical_recipe.split('::')
-          # Only write unit tests for the cookbook we're in. TODO: Strike this.
-          next unless cookbook == tested_cookbook
           content = [preamble(cookbook, recipe)]
           resources.each do |resource|
             content << write_test(resource)
