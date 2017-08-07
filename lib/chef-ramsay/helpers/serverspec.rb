@@ -66,8 +66,10 @@ module Ramsay
             test << "it { should be_owned_by '#{resource.owner}' }"
           end
         end
-        if !resource.mode.nil? && !resource.mode.empty?
-          test << "it { should be_mode '#{resource.mode}' }"
+        if !resource.mode.nil?
+          unless resource.mode.is_a?(String) && !resource.mode.empty?
+            test << "it { should be_mode '#{resource.mode}' }"
+          end
         end
         test << "end"
         test.join("\n")
@@ -99,8 +101,12 @@ module Ramsay
       def test_user(resource)
         test = [desciption(resource)]
         test << "it { should exist }"
-        if !resource.gid.nil? && !resource.gid.empty?
-          test << "it { should belong_to_primary_group '#{resource.gid}' }"
+        # Guard for GIDs rather than strings. Chef aliases the #group method
+        # to the #gid method.
+        if !resource.gid.nil?
+          unless resource.gid.is_a?(String) && !resource.gid.empty?
+            test << "it { should belong_to_primary_group '#{resource.gid}' }"
+          end
         end
         if !resource.home.nil? && !resource.home.empty?
           test << "it { should have_home_directory '#{resource.home}' }"
