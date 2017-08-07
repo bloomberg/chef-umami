@@ -42,6 +42,9 @@ module Ramsay
         "\n" + send("test_#{resource.declared_type}", resource)
       end
 
+      # If the test framework's helper module doesn't provide support for a
+      # given test-related method, return a friendly message.
+      # Raise NoMethodError for any other failed calls.
       def method_missing(m, *args, &block)
         case m
           when /^test_/
