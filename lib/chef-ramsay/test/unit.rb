@@ -53,6 +53,9 @@ module Ramsay
         state_attrs = [] # Attribute hash to be used with #with()
         resource.state.each do |attr, value|
           next if value.nil? or (value.respond_to?(:empty) and value.empty?)
+          if value.is_a? String
+            value = value.gsub("'", "\\\\'") # Escape any single quotes in the value.
+          end
           state_attrs << "#{attr}: '#{value}'"
         end
         action = ''
@@ -61,11 +64,12 @@ module Ramsay
         else
           action = resource.action
         end
-        test_output = ["\nit '#{action}s #{resource.declared_type} \"#{resource.name}\"' do"]
+        resource_name = resource.name.gsub("'", "\\\\'") # Escape any single quotes in the resource name.
+        test_output = ["\nit '#{action}s #{resource.declared_type} \"#{resource_name}\"' do"]
         if state_attrs.empty?
-          test_output << "expect(chef_run).to #{action}_#{resource.declared_type}('#{resource.name}')"
+          test_output << "expect(chef_run).to #{action}_#{resource.declared_type}('#{resource_name}')"
         else
-          test_output << "expect(chef_run).to #{action}_#{resource.declared_type}('#{resource.name}').with(#{state_attrs.join(', ')})"
+          test_output << "expect(chef_run).to #{action}_#{resource.declared_type}('#{resource_name}').with(#{state_attrs.join(', ')})"
         end
         test_output << "end\n"
         test_output.join("\n")
