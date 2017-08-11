@@ -5,7 +5,7 @@ require 'chef-ramsay/version'
 Gem::Specification.new do |gem|
   gem.name          = 'chef-ramsay'
   gem.version       = Ramsay::VERSION
-  gemn.license      = 'Apache-2.0',
+  gem.license       = 'Apache-2.0'
   gem.authors       = ['Ryan Frantz']
   gem.email         = ['ryanleefrantz@gmail.com']
   gem.description   = 'A tool to generate unit/integration tests for Chef cookbooks and policy files.'
