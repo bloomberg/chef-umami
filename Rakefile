@@ -13,6 +13,10 @@ RSpec::Core::RakeTask.new(:unit) do |task|
   task.pattern = 'spec/*_spec.rb'
 end
 
+# The 'test' task is used by Travis, at least.
+desc 'Run test-related tasks'
+task test: %w(rubocop unit)
+
 # Default
-desc 'Run style and unit tests'
-task default: %w(rubocop unit)
+desc 'Default to test-related tasks'
+task default: 'test'

@@ -13,8 +13,8 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.3'
 
-  gem.files         = Dir['{bin,lib,spec,support,test}/**/*', 'README*']
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.files         = Dir['{bin,lib,spec,support,test}/**/*', 'README*', 'LICENSE*', 'CONTRIBUTING*', 'CHANGELOG*']
+  gem.test_files    = gem.files.grep(%r{^(test|spec)/})
   gem.require_paths = ['lib']
   gem.executables   << 'ramsay'
 

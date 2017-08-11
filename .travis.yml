@@ -1,0 +1,12 @@
+language: ruby
+rvm:
+  - 2.3
+before_install:
+ - "echo 'gem: --no-ri --no-rdoc' >> ~/.gemrc"
+install:
+ - gem install chef
+ - gem install chef-dk
+ - gem install rubocop
+# Travis calls `rake` by default for ruby projects. Let's be explicit.
+# Our Rakefile's default task calls the 'test' task.
+script: rake
