@@ -12,11 +12,11 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require "chef-ramsay/runner"
+require "chef-umami/runner"
 
-RSpec.describe Ramsay::Runner do
-  it "initiates a Ramsay::Runner object" do
-    runner = Ramsay::Runner.new
-    expect(runner).to be_an_instance_of(Ramsay::Runner)
+RSpec.describe Umami::Runner do
+  it "initiates a Umami::Runner object" do
+    runner = Umami::Runner.new
+    expect(runner).to be_an_instance_of(Umami::Runner)
   end
 end

@@ -12,7 +12,25 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-module Ramsay
-  class Policyfile
+require 'chef_zero/server'
+
+module Umami
+  class Server
+    def initialize
+      @server = server
+    end
+
+    def server
+      @server ||= ChefZero::Server.new(port: 8889)
+    end
+
+    def start
+      server.start_background
+    end
+
+    def stop
+      server.stop
+    end
+
   end
 end

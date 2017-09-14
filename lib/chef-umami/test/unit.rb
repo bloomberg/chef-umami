@@ -12,22 +12,22 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require 'chef-ramsay/test'
-require 'chef-ramsay/helpers/os'
-require 'chef-ramsay/helpers/filetools'
+require 'chef-umami/test'
+require 'chef-umami/helpers/os'
+require 'chef-umami/helpers/filetools'
 
-module Ramsay
+module Umami
   class Test
-    class Unit < Ramsay::Test
+    class Unit < Umami::Test
 
-      include Ramsay::Helper::OS
-      include Ramsay::Helper::FileTools
+      include Umami::Helper::OS
+      include Umami::Helper::FileTools
 
       attr_reader :test_root
       attr_reader :tested_cookbook # This cookbook.
       def initialize
         super
-        @test_root = File.join(self.root_dir, 'ramsay', 'unit', 'recipes')
+        @test_root = File.join(self.root_dir, 'umami', 'unit', 'recipes')
         @tested_cookbook = File.basename(Dir.pwd)
       end
 

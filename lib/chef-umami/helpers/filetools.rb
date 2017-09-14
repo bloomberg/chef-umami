@@ -12,7 +12,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-module Ramsay
+module Umami
   module Helper
     module FileTools
 
@@ -28,7 +28,7 @@ module Ramsay
     end
 
     # Call Rubocop to ensure proper indentation and thus legibility.
-    def enforce_styling(path = 'spec/ramsay/')
+    def enforce_styling(path = 'spec/umami/')
       puts "Running Rubocop over '#{path}' to enforce styling..."
       r = RuboCop::CLI.new
       # Don't output to STDOUT.

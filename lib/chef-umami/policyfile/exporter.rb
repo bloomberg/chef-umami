@@ -17,7 +17,7 @@ require 'chef-dk/policyfile_services/export_repo'
 require 'chef-dk/ui'
 require 'tmpdir' # Extends Dir
 
-module Ramsay
+module Umami
   class Policyfile
     class Exporter
 
@@ -30,7 +30,7 @@ module Ramsay
 
       def initialize(policyfile_lock_file = nil, cookbook_dir = nil, policyfile = nil)
         @policyfile = policyfile
-        @export_root = Dir.mktmpdir('ramsay-')
+        @export_root = Dir.mktmpdir('umami-')
         # We need the target dir named the same as the source dir so that `chef` commands
         # work as happily programatically as they would via the command line.
         # This is because the commands assume they're being run from within a cookbook
@@ -60,12 +60,12 @@ module Ramsay
       end
 
       def fake_client_key
-        "#{export_path}/ramsay.pem"
+        "#{export_path}/umami.pem"
       end
 
       def cp_fake_client_key
         # Create a fake client cert based on a dummy cert we have laying around.
-        fake_client_key_src = File.join(File.dirname(__FILE__), %w(.. .. .. support ramsay.pem))
+        fake_client_key_src = File.join(File.dirname(__FILE__), %w(.. .. .. support umami.pem))
         FileUtils.cp(fake_client_key_src, fake_client_key)
       end
 
@@ -74,7 +74,7 @@ module Ramsay
           f.puts "chef_server_url 'http://127.0.0.1:8889'"
           f.puts "cookbook_path ['#{export_path}/cookbook_artifacts']"
           f.puts "client_key '#{fake_client_key}'"
-          f.puts "node_name 'ramsay-node'"
+          f.puts "node_name 'umami-node'"
         end
       end
 

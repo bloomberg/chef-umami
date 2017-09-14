@@ -12,22 +12,22 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require 'chef-ramsay/test'
-require 'chef-ramsay/helpers/serverspec'
-require 'chef-ramsay/helpers/filetools'
+require 'chef-umami/test'
+require 'chef-umami/helpers/serverspec'
+require 'chef-umami/helpers/filetools'
 
-module Ramsay
+module Umami
   class Test
-    class Integration < Ramsay::Test
+    class Integration < Umami::Test
 
-      include Ramsay::Helper::ServerSpec
-      include Ramsay::Helper::FileTools
+      include Umami::Helper::ServerSpec
+      include Umami::Helper::FileTools
 
       attr_reader :test_root
       attr_reader :tested_cookbook # This cookbook.
       def initialize
         super
-        @test_root = File.join(self.root_dir, 'ramsay', 'integration')
+        @test_root = File.join(self.root_dir, 'umami', 'integration')
         @tested_cookbook = File.basename(Dir.pwd)
       end
 
@@ -46,7 +46,7 @@ module Ramsay
         "set :backend, #{backend}"
       end
 
-      # Call on the apprpriate method from the Ramsay::Helper::ServerSpec
+      # Call on the apprpriate method from the Umami::Helper::ServerSpec
       # module to generate our test.
       def write_test(resource = nil)
         if resource.action.is_a? Array

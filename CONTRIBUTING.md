@@ -1,6 +1,6 @@
-# Contributing to `chef-ramsay`
+# Contributing to `chef-umami`
 
-At the moment, the requirements for contributing to `chef-ramsay` are simple
+At the moment, the requirements for contributing to `chef-umami` are simple
 and straightfoward:
 
 1. Fork the repo.

@@ -18,7 +18,7 @@ require 'chef-dk/policyfile/uploader'
 require 'chef-dk/policyfile_lock'
 require 'chef-dk/ui'
 
-module Ramsay
+module Umami
   class Policyfile
     class Uploader
 

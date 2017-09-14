@@ -1,0 +1,7 @@
+#!/opt/chefdk/embedded/bin/ruby
+
+chef_umami_lib = File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(chef_umami_lib)
+require "chef-umami/runner"
+
+Umami::Runner.new.run

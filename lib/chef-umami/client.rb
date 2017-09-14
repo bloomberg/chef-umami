@@ -14,7 +14,7 @@
 
 require 'chef'
 
-module Ramsay
+module Umami
   class Client
 
     attr_reader :client

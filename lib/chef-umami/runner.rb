@@ -13,19 +13,19 @@
 #   limitations under the License.
 
 require 'chef'
-require 'chef-ramsay/exceptions'
-require 'chef-ramsay/client'
-require 'chef-ramsay/logger'
-require 'chef-ramsay/server'
-require 'chef-ramsay/policyfile/exporter'
-require 'chef-ramsay/policyfile/uploader'
-require 'chef-ramsay/test/unit'
-require 'chef-ramsay/test/integration'
+require 'chef-umami/exceptions'
+require 'chef-umami/client'
+require 'chef-umami/logger'
+require 'chef-umami/server'
+require 'chef-umami/policyfile/exporter'
+require 'chef-umami/policyfile/uploader'
+require 'chef-umami/test/unit'
+require 'chef-umami/test/integration'
 
-module Ramsay
+module Umami
   class Runner
 
-    include Ramsay::Logger
+    include Umami::Logger
 
     attr_reader :cookbook_dir
     attr_reader :policyfile_lock_file
@@ -54,19 +54,19 @@ module Ramsay
     end
 
     def exporter
-      @exporter ||= Ramsay::Policyfile::Exporter.new(policyfile_lock_file, cookbook_dir, policyfile)
+      @exporter ||= Umami::Policyfile::Exporter.new(policyfile_lock_file, cookbook_dir, policyfile)
     end
 
     def uploader
-      @uploader ||= Ramsay::Policyfile::Uploader.new(policyfile_lock_file)
+      @uploader ||= Umami::Policyfile::Uploader.new(policyfile_lock_file)
     end
 
     def chef_zero_server
-      @chef_zero_server ||= Ramsay::Server.new
+      @chef_zero_server ||= Umami::Server.new
     end
 
     def chef_client
-      @chef_client ||= Ramsay::Client.new
+      @chef_client ||= Umami::Client.new
     end
 
     def run
@@ -95,15 +95,15 @@ module Ramsay
 
       # Remove the temporary directory using a naive guard to ensure we're
       # deleting what we expect.
-      re_export_path = Regexp.new('/tmp/ramsay')
+      re_export_path = Regexp.new('/tmp/umami')
       FileUtils.rm_rf(exporter.export_root) if exporter.export_root.match(re_export_path)
 
       puts "\nGenerating a set of unit tests..."
-      unit_tester = Ramsay::Test::Unit.new
+      unit_tester = Umami::Test::Unit.new
       unit_tester.generate(recipe_resources)
 
       puts "\nGenerating a set of integration tests..."
-      integration_tester = Ramsay::Test::Integration.new
+      integration_tester = Umami::Test::Integration.new
       integration_tester.generate(recipe_resources)
 
     end

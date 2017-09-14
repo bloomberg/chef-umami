@@ -1,10 +1,10 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'chef-ramsay/version'
+require 'chef-umami/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = 'chef-ramsay'
-  gem.version       = Ramsay::VERSION
+  gem.name          = 'chef-umami'
+  gem.version       = Umami::VERSION
   gem.license       = 'Apache-2.0'
   gem.authors       = ['Ryan Frantz']
   gem.email         = ['ryanleefrantz@gmail.com']
@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.files         = Dir['{bin,lib,spec,support,test}/**/*', 'README*', 'LICENSE*', 'CONTRIBUTING*', 'CHANGELOG*']
   gem.test_files    = gem.files.grep(%r{^(test|spec)/})
   gem.require_paths = ['lib']
-  gem.executables   << 'ramsay'
+  gem.executables   << 'umami'
 
   gem.add_dependency 'chef', '~> 12.19'
   gem.add_dependency 'chef-dk', '~> 1.4'
