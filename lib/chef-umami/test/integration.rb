@@ -40,7 +40,7 @@ module Umami
       end
 
       def preamble(cookbook = '', recipe = '')
-        "# #{test_file(cookbook, recipe)} - Originially written by Umami!"
+        "# #{test_file(cookbook, recipe)} - Originally written by Umami!"
       end
 
       # Call on the apprpriate method from the Umami::Helper::InSpec
