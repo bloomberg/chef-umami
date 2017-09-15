@@ -40,7 +40,7 @@ module Umami
       end
 
       def preamble(cookbook = '', recipe = '')
-        "# #{test_file(recipe)}\n" \
+        "# #{test_file(recipe)} - Originially written by Umami!\n" \
         "\n" \
         "require '#{framework}'\n" \
         "require '#{framework}/policyfile'\n" \

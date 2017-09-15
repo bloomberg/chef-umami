@@ -14,14 +14,7 @@
 
 module Umami
   module Helper
-    module ServerSpec
-
-      # ServerSpec supports the following backends:
-      #  :exec - Local execution. Good for Test Kitchen
-      #  :ssh  - Remote execution via SSH.
-      def backend
-        :exec.inspect
-      end
+    module InSpec
 
       # Call on a resource's #identity method to help describe the resource.
       # This saves us from having to know/code the identity attribute for each

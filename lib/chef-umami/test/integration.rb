@@ -13,26 +13,26 @@
 #   limitations under the License.
 
 require 'chef-umami/test'
-require 'chef-umami/helpers/serverspec'
+require 'chef-umami/helpers/inspec'
 require 'chef-umami/helpers/filetools'
 
 module Umami
   class Test
     class Integration < Umami::Test
 
-      include Umami::Helper::ServerSpec
+      include Umami::Helper::InSpec
       include Umami::Helper::FileTools
 
       attr_reader :test_root
-      attr_reader :tested_cookbook # This cookbook.
       def initialize
         super
         @test_root = File.join(self.root_dir, 'umami', 'integration')
-        @tested_cookbook = File.basename(Dir.pwd)
       end
 
+      # InSpec doesn't need a require statement to use its tests.
+      # We define #framework here for completeness.
       def framework
-        "serverspec"
+        "inspec"
       end
 
       def test_file(cookbook = '', recipe = '')
@@ -40,13 +40,10 @@ module Umami
       end
 
       def preamble(cookbook = '', recipe = '')
-        "# #{test_file(cookbook, recipe)}\n" \
-        "\n" \
-        "require '#{framework}'\n" \
-        "set :backend, #{backend}"
+        "# #{test_file(cookbook, recipe)} - Originially written by Umami!"
       end
 
-      # Call on the apprpriate method from the Umami::Helper::ServerSpec
+      # Call on the apprpriate method from the Umami::Helper::InSpec
       # module to generate our test.
       def write_test(resource = nil)
         if resource.action.is_a? Array
