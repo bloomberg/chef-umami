@@ -41,6 +41,32 @@ module Umami
       #  test.join("\n")
       #end
 
+      # InSpec can evaluate if a gem is installed via the system `gem` (default)
+      # or via some other `gem` binary, defined by either the path to the gem
+      # binary of a symbol representing that context.
+      def test_gem_package(resource, gem_binary=nil)
+        package_name = resource.package_name
+        if gem_binary
+          if gem_binary.is_a? Symbol
+            gem_binary = gem_binary.inspect # Stringify the symbol.
+          else
+            gem_binary = "'#{gem_binary}'"
+          end
+          test = ["Gem '#{package_name}' is installed via the #{gem_binary} gem"]
+          test << "describe gem('#{package_name}', #{gem_binary}) do"
+        else
+          test = ["Gem '#{package_name}' is installed via the #{gem_binary} gem"]
+          test << "describe gem('#{package_name}') do"
+        end
+        test << 'it { should be_installed }'
+        tst << 'end'
+        test.join("\n")
+      end
+
+      def test_chef_gem(resource)
+        test_gem_package(resource, ':chef')
+      end
+
       def test_cron(resource)
         test = [desciption(resource)]
         cron_entry = "#{resource.minute} "  \
