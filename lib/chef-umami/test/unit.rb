@@ -39,6 +39,10 @@ module Umami
         "#{test_root}/#{recipe}_spec.rb"
       end
 
+      def spec_helper_path
+        File.join(test_root, '..', 'spec_helper.rb'
+      end
+
       def preamble(cookbook = '', recipe = '')
         "# #{test_file(recipe)} - Originally written by Umami!\n" \
         "\n" \
@@ -47,6 +51,13 @@ module Umami
         "\n" \
         "describe '#{cookbook}::#{recipe}' do\n" \
         "let(:chef_run) { ChefSpec::ServerRunner.new(platform: '#{os[:platform]}', version: '#{os[:version]}').converge(described_recipe) }"
+      end
+
+      def write_spec_helper
+        content = ["require 'chefspec'"]
+        content << "require 'chefspec/policyfile'"
+        content.join!("\n")
+        write_file(spec_helper_path, content)
       end
 
       def write_test(resource = nil)
@@ -93,6 +104,8 @@ module Umami
         end
 
         enforce_styling(test_root)
+        write_spec_helper
+        test_files_written << spec_helper_path
 
         unless test_files_written.empty?
           puts "Wrote the following unit test files:"
