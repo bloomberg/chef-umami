@@ -59,7 +59,7 @@ module Umami
           test << "describe gem('#{package_name}') do"
         end
         test << 'it { should be_installed }'
-        tst << 'end'
+        test << 'end'
         test.join("\n")
       end
 
