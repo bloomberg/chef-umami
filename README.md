@@ -3,6 +3,10 @@
 A tool that attempts to write unit and integration tests for Chef cookbooks and
 policies, making it easier to do the right thing and test code.
 
+Let's see it in action!
+
+[![asciicast](https://asciinema.org/a/138816.png)](https://asciinema.org/a/138816)
+
 ## How does it Work?
 
 `umami` loads up one or more cookbooks in a `chef-zero` instance, executes the
@@ -35,7 +39,7 @@ and I have the following recipes:
 │   └── stocks.rb
 ```
 
-`umami` will write tests as follows:
+`umami` will write tests as follows (assuming the recipes are defined in the run list):
 
 ```
 ├── spec/

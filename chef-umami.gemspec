@@ -9,6 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Ryan Frantz']
   gem.email         = ['ryanleefrantz@gmail.com']
   gem.description   = 'A tool to generate unit/integration tests for Chef cookbooks and policy files.'
+  gem.homepage      = 'https://github.com/bloomberg/chef-umami'
   gem.summary       = gem.description
 
   gem.required_ruby_version = '>= 2.3'
