@@ -23,8 +23,7 @@ write by matching the current directory to resources derived from that cookbook.
 
 ### Integration Tests
 
-Using either Serverspec or Inspec (coming soon), `umami` writes integration
-tests for all the resources it has found.
+`umami` writes Inspec-type integration tests for all the resources it has found.
 
 ### Spec Files
 
@@ -101,8 +100,8 @@ test file, like so:
 
 It's preferred to use `kitchen verify` to execute all integration tests.
 Teach `kitchen` to run `umami`'s tests by updating `.kitchen.yml`. Specify
-the appropriate `verifier` (`inspec` should mostly support Serverspec tests)
-and, if needed, direct `kitchen` where the tests are located:
+the appropriate `verifier` (`inspec`) and, if needed, direct `kitchen` where
+the tests are located:
 
 ```
 verifier:
@@ -136,11 +135,15 @@ without worrying about what the resulting indentation will be.
 
 `umami` depends on ChefDK to do the bulk of the work resolving cookbooks and
 their dependencies. Further, `umami` assumes you're using Policyfile to manage
-your nodes' run list.
+the run list.
 
 ## Caveats
 
 `umami` is still in early and rapid development. Expect to see lots of activity.
+
+`umami` **always overwrites the contents of `spec/umami` on each run.** This may
+change in the future. Until then, you may want to move the generated tests
+into a different subdirectory (i.e. `test/`).
 
 `umami` is not aware of any context. For example, if a recipe includes another
 recipe based on some condition (i.e. operating system), `umami` won't know about
@@ -151,7 +154,7 @@ anything, you want to use.
 
 `umami`'s goal is to help get you started writing and using tests in your
 development cycle. It tries its best to provide a useful set of tests that you
-can build on.
+can build on. **Do NOT depend solely on `umami` to provide test coverage!**
 
 ## Inspiration and Thanks
 
