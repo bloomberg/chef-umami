@@ -35,12 +35,12 @@ module Umami
         "inspec"
       end
 
-      def test_file(cookbook = '', recipe = '')
+      def test_file_path(cookbook = '', recipe = '')
         "#{test_root}/#{cookbook}_#{recipe}_spec.rb"
       end
 
       def preamble(cookbook = '', recipe = '')
-        "# #{test_file(cookbook, recipe)} - Originally written by Umami!"
+        "# #{test_file_path(cookbook, recipe)} - Originally written by Umami!"
       end
 
       # Call on the apprpriate method from the Umami::Helper::InSpec
@@ -73,7 +73,7 @@ module Umami
           resources.each do |resource|
             content << write_test(resource)
           end
-          test_file_name = test_file(cookbook, recipe)
+          test_file_name = test_file_path(cookbook, recipe)
           test_file_content = content.join("\n") + "\n"
           write_file(test_file_name, test_file_content)
           test_files_written << test_file_name
