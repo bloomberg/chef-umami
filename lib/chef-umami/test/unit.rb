@@ -46,16 +46,15 @@ module Umami
       def preamble(cookbook = '', recipe = '')
         "# #{test_file(recipe)} - Originally written by Umami!\n" \
         "\n" \
-        "require '#{framework}'\n" \
-        "require '#{framework}/policyfile'\n" \
+        "require_relative '../spec_helper'\n" \
         "\n" \
         "describe '#{cookbook}::#{recipe}' do\n" \
         "let(:chef_run) { ChefSpec::ServerRunner.new(platform: '#{os[:platform]}', version: '#{os[:version]}').converge(described_recipe) }"
       end
 
       def write_spec_helper
-        content = ["require 'chefspec'"]
-        content << "require 'chefspec/policyfile'"
+        content = ["require '#{framework}'"]
+        content << "require '#{framework}/policyfile'"
         content.join!("\n")
         write_file(spec_helper_path, content)
       end
