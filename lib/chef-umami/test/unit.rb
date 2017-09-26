@@ -40,7 +40,7 @@ module Umami
       end
 
       def spec_helper_path
-        File.join(test_root, '..', 'spec_helper.rb'
+        File.join(test_root, '..', 'spec_helper.rb')
       end
 
       def preamble(cookbook = '', recipe = '')
