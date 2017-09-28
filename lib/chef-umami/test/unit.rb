@@ -55,8 +55,8 @@ module Umami
       def write_spec_helper
         content = ["require '#{framework}'"]
         content << "require '#{framework}/policyfile'"
-        content.join!("\n")
-        write_file(spec_helper_path, content)
+        content << "at_exit { ChefSpec::Coverage.report! }\n"
+        write_file(spec_helper_path, content.join("\n"))
       end
 
       def write_test(resource = nil)
