@@ -13,5 +13,5 @@
 #   limitations under the License.
 
 module Umami
-  VERSION = '0.0.4'
+  VERSION = '0.0.4'.freeze
 end

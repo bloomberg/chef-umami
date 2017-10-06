@@ -14,7 +14,6 @@
 
 module Umami
   class Test
-
     attr_reader :root_dir
     def initialize
       @root_dir = 'spec'
@@ -58,6 +57,5 @@ module Umami
     def generate
       raise NoMethodError, "#{self.class} needs to implement the ##{__method__} method! Refer to Umami::Test."
     end
-
   end
 end

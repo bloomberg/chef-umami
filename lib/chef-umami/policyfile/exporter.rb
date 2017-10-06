@@ -20,13 +20,12 @@ require 'tmpdir' # Extends Dir
 module Umami
   class Policyfile
     class Exporter
-
       attr_reader   :chef_config_file
       attr_reader   :cookbook_dir
       attr_reader   :export_root
       attr_reader   :export_path
-      attr_accessor :policyfile_lock_file
       attr_reader   :policyfile
+      attr_accessor :policyfile_lock_file
 
       def initialize(policyfile_lock_file = nil, cookbook_dir = nil, policyfile = nil)
         @policyfile = policyfile
@@ -37,10 +36,6 @@ module Umami
         # directory.
         @export_path = File.join(export_root, cookbook_dir)
         @chef_config_file = "#{export_path}/.chef/config.rb"
-      end
-
-      def policyfile
-        @policyfile
       end
 
       def ui
@@ -92,7 +87,7 @@ module Umami
         rescue ChefDK::PolicyfileExportRepoError => e
           puts "\nFAILED TO EXPORT POLICYFILE: #{e.message} (#{e.class})"
           puts "CAUSE: #{e.cause}"
-          puts "BACKTRACE:"
+          puts 'BACKTRACE:'
           e.backtrace.each do |line|
             puts "\t#{line}"
           end
@@ -101,7 +96,6 @@ module Umami
         cp_fake_client_key
         update_chef_config
       end
-
     end
   end
 end

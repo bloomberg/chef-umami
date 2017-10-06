@@ -15,14 +15,14 @@
 module Umami
   module Helper
     module InSpec
-
       # Call on a resource's #identity method to help describe the resource.
       # This saves us from having to know/code the identity attribute for each
       # resource (i.e. File is :path, User is :username, etc).
       def desciption(resource)
-        identity = resource.identity
         if identity.is_a? Hash # #identity could return a Hash. Take the first value.
           identity = identity.values.first
+        else
+          identity = resource.identity
         end
         "describe #{resource.declared_type}('#{identity}') do"
       end
@@ -34,17 +34,17 @@ module Umami
       #  (i.e. testing a directory resource requires defining a file test).
       #  2. The method should should return a string joined by newlines.
       #
-      #def test_wutang(resource)
-      #  test = [desciption(resource)]
-      #  test << "it { should be_financially_sound }"
-      #  test << "it { should be_diverisified }"
-      #  test.join("\n")
-      #end
+      # def test_wutang(resource)
+      #   test = [desciption(resource)]
+      #   test << "it { should be_financially_sound }"
+      #   test << "it { should be_diverisified }"
+      #   test.join("\n")
+      # end
 
       # InSpec can evaluate if a gem is installed via the system `gem` (default)
       # or via some other `gem` binary, defined by either the path to the gem
       # binary of a symbol representing that context.
-      def test_gem_package(resource, gem_binary=nil)
+      def test_gem_package(resource, gem_binary = nil)
         package_name = resource.package_name
         if gem_binary
           if gem_binary.is_a? Symbol
@@ -76,35 +76,35 @@ module Umami
                      "#{resource.weekday} " \
                      "#{resource.command}"
         test << "it { should have_entry('#{cron_entry}').with_user('#{resource.user}') }"
-        test << "end"
+        test << 'end'
         test.join("\n")
       end
 
       def test_file(resource)
         test = ["describe file('#{resource.path}') do"]
         if resource.declared_type =~ /directory/
-          test << "it { should be_directory }"
+          test << 'it { should be_directory }'
         else
-          test << "it { should be_file }"
+          test << 'it { should be_file }'
         end
         # Sometimes we see GIDs instead of group names.
-        if !resource.group.nil?
+        unless resource.group.nil?
           unless resource.group.is_a?(String) && resource.group.empty?
             test << "it { should be_grouped_into '#{resource.group}' }"
           end
         end
         # Guard for UIDs versus usernames as well.
-        if !resource.owner.nil?
+        unless resource.owner.nil?
           unless resource.owner.is_a?(String) && resource.owner.empty?
             test << "it { should be_owned_by '#{resource.owner}' }"
           end
         end
-        if !resource.mode.nil?
+        unless resource.mode.nil?
           unless resource.mode.is_a?(String) && !resource.mode.empty?
             test << "it { should be_mode '#{resource.mode}' }"
           end
         end
-        test << "end"
+        test << 'end'
         test.join("\n")
       end
       alias_method :test_cookbook_file, :test_file
@@ -115,8 +115,8 @@ module Umami
 
       def test_group(resource)
         test = [desciption(resource)]
-        test << "it { should exist }"
-        test << "end"
+        test << 'it { should exist }'
+        test << 'end'
         test.join("\n")
       end
 
@@ -125,18 +125,18 @@ module Umami
         if !resource.version.nil? && !resource.version.empty?
           test << "it { should be_installed.with_version('#{resource.version}') }"
         else
-          test << "it { should be_installed }"
+          test << 'it { should be_installed }'
         end
-        test << "end"
+        test << 'end'
         test.join("\n")
       end
 
       def test_user(resource)
         test = [desciption(resource)]
-        test << "it { should exist }"
+        test << 'it { should exist }'
         # Guard for GIDs rather than strings. Chef aliases the #group method
         # to the #gid method.
-        if !resource.gid.nil?
+        unless resource.gid.nil?
           unless resource.gid.is_a?(String) && !resource.gid.empty?
             test << "it { should belong_to_primary_group '#{resource.gid}' }"
           end
@@ -144,10 +144,9 @@ module Umami
         if !resource.home.nil? && !resource.home.empty?
           test << "it { should have_home_directory '#{resource.home}' }"
         end
-        test << "end"
+        test << 'end'
         test.join("\n")
       end
-
     end
   end
 end

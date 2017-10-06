@@ -17,10 +17,9 @@ Gem::Specification.new do |gem|
   gem.files         = Dir['{bin,lib,spec,support,test}/**/*', 'README*', 'LICENSE*', 'CONTRIBUTING*', 'CHANGELOG*']
   gem.test_files    = gem.files.grep(%r{^(test|spec)/})
   gem.require_paths = ['lib']
-  gem.executables   << 'umami'
+  gem.executables << 'umami'
 
   gem.add_dependency 'chef', '~> 12.19'
   gem.add_dependency 'chef-dk', '~> 1.4'
   gem.add_dependency 'rubocop', '~> 0.47'
-
 end

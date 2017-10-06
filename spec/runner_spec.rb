@@ -12,10 +12,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-require "chef-umami/runner"
+require 'chef-umami/runner'
 
 RSpec.describe Umami::Runner do
-  it "initiates a Umami::Runner object" do
+  it 'initiates a Umami::Runner object' do
     runner = Umami::Runner.new
     expect(runner).to be_an_instance_of(Umami::Runner)
   end
