@@ -13,8 +13,6 @@
 #   limitations under the License.
 
 module Umami
-
   class InvalidPolicyfileLockFilename < StandardError
   end
-
 end

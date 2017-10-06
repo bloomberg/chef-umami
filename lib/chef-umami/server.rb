@@ -31,6 +31,5 @@ module Umami
     def stop
       server.stop
     end
-
   end
 end

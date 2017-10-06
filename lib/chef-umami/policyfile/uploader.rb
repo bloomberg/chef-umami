@@ -21,21 +21,15 @@ require 'chef-dk/ui'
 module Umami
   class Policyfile
     class Uploader
-
-      attr_reader :http_client
-      attr_reader :policyfile_lock
       attr_reader :policyfile_lock_file
-      attr_reader :policyfile_uploader
-      attr_reader :storage_config
-      attr_reader :ui
-		  def initialize(policyfile_lock_file = nil)
+      def initialize(policyfile_lock_file = nil)
         @http_client = http_client
         @policyfile_lock_file = policyfile_lock_file
         @policyfile_lock = policyfile_lock
         @policyfile_uploader = policyfile_uploader
         @storage_config = storage_config
         @ui = ui
-		  end
+      end
 
       def storage_config
         @storage_config ||= ChefDK::Policyfile::StorageConfig.new.use_policyfile(policyfile_lock_file)
@@ -86,7 +80,6 @@ module Umami
       def upload
         policyfile_uploader.upload
       end
-
     end
   end
 end

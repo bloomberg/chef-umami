@@ -19,7 +19,6 @@ require 'chef-umami/helpers/filetools'
 module Umami
   class Test
     class Unit < Umami::Test
-
       include Umami::Helper::OS
       include Umami::Helper::FileTools
 
@@ -32,7 +31,7 @@ module Umami
       end
 
       def framework
-        "chefspec"
+        'chefspec'
       end
 
       def test_file(recipe = '')
@@ -62,7 +61,7 @@ module Umami
       def write_test(resource = nil)
         state_attrs = [] # Attribute hash to be used with #with()
         resource.state.each do |attr, value|
-          next if value.nil? or (value.respond_to?(:empty) and value.empty?)
+          next if value.nil? || (value.respond_to?(:empty) && value.empty?)
           if value.is_a? String
             value = value.gsub("'", "\\\\'") # Escape any single quotes in the value.
           end
@@ -95,7 +94,7 @@ module Umami
           resources.each do |resource|
             content << write_test(resource)
           end
-          content << "end"
+          content << 'end'
           test_file_name = test_file(recipe)
           test_file_content = content.join("\n") + "\n"
           write_file(test_file_name, test_file_content)
@@ -107,14 +106,12 @@ module Umami
         test_files_written << spec_helper_path
 
         unless test_files_written.empty?
-          puts "Wrote the following unit test files:"
+          puts 'Wrote the following unit test files:'
           test_files_written.each do |f|
             puts "\t#{f}"
           end
         end
-
       end
-
     end
   end
 end

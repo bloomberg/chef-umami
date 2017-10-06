@@ -16,8 +16,6 @@ require 'chef'
 
 module Umami
   class Client
-
-    attr_reader :client
     def initialize
       @client = client
     end
@@ -45,6 +43,5 @@ module Umami
     def resource_collection
       client.run_status.run_context.resource_collection
     end
-
   end
 end
