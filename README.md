@@ -164,7 +164,7 @@ nothing seemed so daunting that it's likely no on would ever get started. I
 wanted to give Chef developers a means to expedite writing tests. After all,
 it's much easier to modify code than it is to write it in the first place.
 
-`umami` is the product of reearch into various projects' code, such as
+`umami` is the product of research into various projects' code, such as
 Chef, ChefDK, and Test Kitchen. I am grateful to everyone that has contributed
 to those projects. `umami` borrows some patterns from those projects and, in
 some cases, bits of code.
