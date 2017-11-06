@@ -16,6 +16,7 @@ require 'chef'
 require 'chef-umami/exceptions'
 require 'chef-umami/client'
 require 'chef-umami/logger'
+require 'chef-umami/options'
 require 'chef-umami/server'
 require 'chef-umami/policyfile/exporter'
 require 'chef-umami/policyfile/uploader'
@@ -69,6 +70,7 @@ module Umami
     end
 
     def run
+      parse_options
       validate_lock_file!
       puts "\nExporting the policy, related cookbooks, and a valid client configuration..."
       exporter.export
