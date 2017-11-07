@@ -57,15 +57,15 @@ module Umami
           exit
         }
       end
-			begin
-      	parser.parse!
-			rescue OptionParser::InvalidOption => e
-				puts "Warning: #{e.message}"
+      begin
+        parser.parse!
+      rescue OptionParser::InvalidOption => e
+        puts "Warning: #{e.message}"
         if e.message =~ /--pattern/
-            puts 'Ah, this is likely parsed from `rspec` options. We can safely ignore this.'
+          puts 'Ah, this is likely parsed from `rspec` options. We can safely ignore this.'
         end
-        puts "Ignoring the option."
-			end
+        puts 'Ignoring the option.'
+      end
       options
     end
   end
