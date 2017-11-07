@@ -16,6 +16,7 @@ require 'chef'
 require 'chef-umami/exceptions'
 require 'chef-umami/client'
 require 'chef-umami/logger'
+require 'chef-umami/options'
 require 'chef-umami/server'
 require 'chef-umami/policyfile/exporter'
 require 'chef-umami/policyfile/uploader'
@@ -25,21 +26,33 @@ require 'chef-umami/test/integration'
 module Umami
   class Runner
     include Umami::Logger
+    include Umami::Options
 
     attr_reader :cookbook_dir
-    attr_reader :policyfile_lock_file
-    attr_reader :policyfile
-    # TODO: Build the ability to specify a custom policy lock file name.
-    def initialize(policyfile_lock_file = nil, policyfile = nil)
+    def initialize
+      @config = config
       @cookbook_dir = Dir.pwd
-      @policyfile_lock_file = 'Policyfile.lock.json'
-      @policyfile = policyfile || 'Policyfile.rb'
       @exporter = exporter
       @chef_zero_server = chef_zero_server
       # If we load the uploader or client now, they won't see the updated
       # Chef config!
       @uploader = nil
       @chef_client = nil
+    end
+
+    # A hash of values describing the config. Comprised of command line
+    # options. May (in the future) contain options read from a config file.
+    def config
+      @config ||= parse_options
+    end
+
+    def policyfile
+      config[:policyfile]
+    end
+
+    # Return the computed policyfile lock name.
+    def policyfile_lock_file
+      policyfile.gsub(/\.rb$/, '.lock.json')
     end
 
     def validate_lock_file!
@@ -85,6 +98,12 @@ module Umami
       recipe_resources = {}
       chef_client.resource_collection.each do |resource|
         canonical_recipe = "#{resource.cookbook_name}::#{resource.recipe_name}"
+        unless config[:recipes].empty?
+          # The user has explicitly requested that one or more recipes have
+          # tests written, to the exclusion of others.
+          # ONLY include the recipe if it matches the list.
+          next unless config[:recipes].include?(canonical_recipe)
+        end
         if recipe_resources.key?(canonical_recipe)
           recipe_resources[canonical_recipe] << resource
         else
@@ -97,13 +116,17 @@ module Umami
       re_export_path = Regexp.new('/tmp/umami')
       FileUtils.rm_rf(exporter.export_root) if exporter.export_root.match(re_export_path)
 
-      puts "\nGenerating a set of unit tests..."
-      unit_tester = Umami::Test::Unit.new
-      unit_tester.generate(recipe_resources)
+      if config[:unit_tests]
+        puts "\nGenerating a set of unit tests..."
+        unit_tester = Umami::Test::Unit.new(config[:test_root])
+        unit_tester.generate(recipe_resources)
+      end
 
-      puts "\nGenerating a set of integration tests..."
-      integration_tester = Umami::Test::Integration.new
-      integration_tester.generate(recipe_resources)
+      if config[:integration_tests]
+        puts "\nGenerating a set of integration tests..."
+        integration_tester = Umami::Test::Integration.new(config[:test_root])
+        integration_tester.generate(recipe_resources)
+      end
     end
   end
 end

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.5]
+- Adds support for parsing options.
+- Minor typo fixes.
+
 ## [0.0.4]
 - Fixes a bug where two methods have the same name. Thanks @HarryYC.
 - Adds `spec_helper.rb` for unit tests, cutting down on boilerplate in each unit test.

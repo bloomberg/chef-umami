@@ -23,7 +23,7 @@ module Umami
       include Umami::Helper::FileTools
 
       attr_reader :test_root
-      def initialize
+      def initialize(root_dir)
         super
         @test_root = File.join(self.root_dir, 'umami', 'integration')
       end

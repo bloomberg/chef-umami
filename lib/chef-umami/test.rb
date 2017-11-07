@@ -15,8 +15,8 @@
 module Umami
   class Test
     attr_reader :root_dir
-    def initialize
-      @root_dir = 'spec'
+    def initialize(root_dir)
+      @root_dir = root_dir
     end
 
     # All subclasses should implement the following methods.

@@ -2,6 +2,8 @@ Lint/UnusedMethodArgument:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false
+Metrics/BlockLength:
+  Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
 Metrics/LineLength:
@@ -15,6 +17,8 @@ Metrics/PerceivedComplexity:
 Naming/FileName:
   Enabled: false
 Style/Alias:
+  Enabled: false
+Style/BlockDelimiters:
   Enabled: false
 Style/ConditionalAssignment:
   Enabled: false
