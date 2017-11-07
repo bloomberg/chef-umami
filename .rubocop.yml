@@ -18,6 +18,8 @@ Naming/FileName:
   Enabled: false
 Style/Alias:
   Enabled: false
+Style/BlockDelimiters:
+  Enabled: false
 Style/ConditionalAssignment:
   Enabled: false
 Style/Documentation:
