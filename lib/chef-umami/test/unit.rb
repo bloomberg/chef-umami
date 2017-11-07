@@ -24,7 +24,7 @@ module Umami
 
       attr_reader :test_root
       attr_reader :tested_cookbook # This cookbook.
-      def initialize
+      def initialize(root_dir)
         super
         @test_root = File.join(self.root_dir, 'umami', 'unit', 'recipes')
         @tested_cookbook = File.basename(Dir.pwd)

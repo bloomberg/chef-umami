@@ -7,6 +7,26 @@ Let's see it in action!
 
 [![asciicast](https://asciinema.org/a/138816.png)](https://asciinema.org/a/138816)
 
+## Running `umami`
+
+A number of options maybe specified on the command line:
+
+```bash
+Usage: umami [options]
+
+A taste you won't forget!
+
+    -h, --help                       Prints this help message
+    -i, --[no-]integration-tests     Write integration tests (DEFAULT: true)
+    -p, --policyfile POLICYFILE_PATH Specify the path to a policy (DEFAULT: Policyfile.rb)
+    -r, --recipes RECIPE1,RECIPE2    Specify one or more recipes for which we'll write tests (DEFAULT: All recipes)
+    -t, --test-root TEST_ROOT_PATH   Specify the path into which we'll write tests (DEFAULT: spec)
+    -u, --[no-]unit-tests            Write unit tests (DEFAULT: true)
+    -v, --version                    Show version and exit
+```
+
+If not options are specified, a reasonable set of defaults are defined.
+
 ## How does it Work?
 
 `umami` loads up one or more cookbooks in a `chef-zero` instance, executes the
