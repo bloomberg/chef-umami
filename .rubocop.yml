@@ -1,3 +1,17 @@
+AllCops:
+  Exclude:
+    - 'Guardfile'
+    - 'Rakefile'
+    - 'Vagrantfile'
+    - 'Policyfile.rb'
+    - 'Berksfile'
+    - 'Thorfile'
+    - 'Gemfile'
+    - 'metadata.rb'
+    - 'test/**/*'
+    - 'spec/**/*'
+    - 'bin/**'
+    - 'vendor/**/*'
 Lint/UnusedMethodArgument:
   Enabled: false
 Metrics/AbcSize:
