@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.3
+  - 2.4
 before_install:
  - "echo 'gem: --no-ri --no-rdoc' >> ~/.gemrc"
 install:
