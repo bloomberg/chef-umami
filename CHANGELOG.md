@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.6]
+- Adds tests.
+- Updates gem dependencies to use newer versions of Chef and ChefDK.
+- Updates Travis configuration to install newer versions of gems.
+
 ## [0.0.5]
 - Adds support for parsing options.
 - Minor typo fixes.
