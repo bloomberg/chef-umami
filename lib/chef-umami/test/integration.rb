@@ -55,10 +55,10 @@ module Umami
       # If the test framework's helper module doesn't provide support for a
       # given test-related method, return a friendly message.
       # Raise NoMethodError for any other failed calls.
-      def method_missing(m, *args, &block)
-        case m
+      def method_missing(meth, *args, &block)
+        case meth
         when /^test_/
-          "# #{m} is not currently defined. Stay tuned for updates."
+          "# #{meth} is not currently defined. Stay tuned for updates."
         else
           raise NoMethodError
         end
