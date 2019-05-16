@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.executables << 'umami'
 
-  gem.add_dependency 'chef', '~> 13.0'
-  gem.add_dependency 'chef-dk', '~> 2.5'
-  gem.add_dependency 'rubocop', '~> 0.47'
+  gem.add_dependency 'chef', '~> 14'
+  gem.add_dependency 'chef-dk', '~> 3'
+  gem.add_dependency 'rubocop', '~> 0.69'
 end

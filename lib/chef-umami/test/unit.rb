@@ -60,8 +60,9 @@ module Umami
 
       def write_test(resource = nil)
         state_attrs = [] # Attribute hash to be used with #with()
-        resource.state.each do |attr, value|
+        resource.state_for_resource_reporter.each do |attr, value|
           next if value.nil? || (value.respond_to?(:empty) && value.empty?)
+
           if value.is_a? String
             value = value.gsub("'", "\\\\'") # Escape any single quotes in the value.
           end
@@ -90,6 +91,7 @@ module Umami
           (cookbook, recipe) = canonical_recipe.split('::')
           # Only write unit tests for the cookbook we're in.
           next unless cookbook == tested_cookbook
+
           content = [preamble(cookbook, recipe)]
           resources.each do |resource|
             content << write_test(resource)
