@@ -49,6 +49,7 @@ module Umami
           return if resource.action.include?(:delete)
         end
         return if resource.action == :delete
+
         "\n" + send("test_#{resource.declared_type}", resource)
       end
 

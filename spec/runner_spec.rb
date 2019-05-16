@@ -18,17 +18,16 @@ RSpec.describe Umami::Runner do
   it 'initiates a Umami::Runner object' do
     runner = Umami::Runner.new
     expect(runner).to be_an_instance_of(Umami::Runner)
-    expect(runner.exporter).to be_an_instance_of(Umami::Policyfile::Exporter)
     expect(runner.chef_zero_server).to be_an_instance_of(Umami::Server)
   end
 
   context 'with no options provided' do
     it 'sets proper defaults' do
       runner = Umami::Runner.new
-      expect(runner.config[:integration_tests]).to be true
+      expect(runner.umami_config[:integration_tests]).to be true
       expect(runner.policyfile).to eq("Policyfile.rb")
-      expect(runner.config[:test_root]).to eq("spec")
-      expect(runner.config[:unit_tests]).to be true
+      expect(runner.umami_config[:test_root]).to eq("spec")
+      expect(runner.umami_config[:unit_tests]).to be true
     end
   end
 
@@ -41,10 +40,10 @@ RSpec.describe Umami::Runner do
       my_argv.flatten!
       stub_const("ARGV", my_argv)
       runner = Umami::Runner.new
-      expect(runner.config[:integration_tests]).to be false
+      expect(runner.umami_config[:integration_tests]).to be false
       expect(runner.policyfile).to eq("test_policy.rb")
-      expect(runner.config[:test_root]).to eq("dust_spec")
-      expect(runner.config[:unit_tests]).to be false
+      expect(runner.umami_config[:test_root]).to eq("dust_spec")
+      expect(runner.umami_config[:unit_tests]).to be false
     end
   end
 

@@ -30,6 +30,9 @@ Metrics/PerceivedComplexity:
   Enabled: false
 Naming/FileName:
   Enabled: false
+# YOU'RE UNCOMMUNICATIVE
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
 Style/Alias:
   Enabled: false
 Style/BlockDelimiters:
@@ -38,9 +41,15 @@ Style/ConditionalAssignment:
   Enabled: false
 Style/Documentation:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
 Style/GuardClause:
   Enabled: false
-Style/MethodMissing: # Let's learn more about this one and enable, soon.
+Style/IfUnlessModifier:
+  Enabled: false
+Style/MethodMissingSuper:
+  Enabled: false
+Style/MissingRespondToMissing:
   Enabled: false
 Style/MultilineMemoization:
   Enabled: false

@@ -18,10 +18,10 @@ require 'chef-umami/client'
 require 'chef-umami/logger'
 require 'chef-umami/options'
 require 'chef-umami/server'
-require 'chef-umami/policyfile/exporter'
-require 'chef-umami/policyfile/uploader'
+require 'chef-umami/policyfile_services/push'
 require 'chef-umami/test/unit'
 require 'chef-umami/test/integration'
+require 'chef-dk/ui'
 
 module Umami
   class Runner
@@ -30,24 +30,36 @@ module Umami
 
     attr_reader :cookbook_dir
     def initialize
-      @config = config
+      @umami_config = umami_config
       @cookbook_dir = Dir.pwd
-      @exporter = exporter
-      @chef_zero_server = chef_zero_server
-      # If we load the uploader or client now, they won't see the updated
-      # Chef config!
-      @uploader = nil
+      ## If we load the pusher or client now, they won't see the updated
+      ## Chef config!
+      @push = nil
       @chef_client = nil
+      @ui = ui
     end
 
-    # A hash of values describing the config. Comprised of command line
+    # A hash of values describing the Umami config. Comprised of command line
     # options. May (in the future) contain options read from a config file.
-    def config
-      @config ||= parse_options
+    def umami_config
+      @umami_config ||= parse_options
+    end
+
+    # Convenience to return the Chef::Config singleton.
+    def chef_config
+      Chef::Config
+    end
+
+    def ui
+      @ui ||= ChefDK::UI.new
     end
 
     def policyfile
-      config[:policyfile]
+      umami_config[:policyfile]
+    end
+
+    def policy_group
+      chef_config['policy_group']
     end
 
     # Return the computed policyfile lock name.
@@ -65,12 +77,14 @@ module Umami
       end
     end
 
-    def exporter
-      @exporter ||= Umami::Policyfile::Exporter.new(policyfile_lock_file, cookbook_dir, policyfile)
-    end
-
-    def uploader
-      @uploader ||= Umami::Policyfile::Uploader.new(policyfile_lock_file)
+    def push
+      # rubocop:disable Layout/AlignHash
+      @push ||= Umami::PolicyfileServices::Push.new(policyfile: policyfile,
+                                                      ui:           ui,
+                                                      policy_group: policy_group,
+                                                      config:       chef_config,
+                                                      root_dir:     cookbook_dir)
+      # rubocop:enable Layout/AlignHash
     end
 
     def chef_zero_server
@@ -78,31 +92,27 @@ module Umami
     end
 
     def chef_client
-      @chef_client ||= Umami::Client.new
+      @chef_client ||= Umami::Client.new(policyfile)
     end
 
     def run
       validate_lock_file!
-      puts "\nExporting the policy, related cookbooks, and a valid client configuration..."
-      exporter.export
-      Chef::Config.from_file(exporter.chef_config_file)
+      chef_client.apply_config!
       chef_zero_server.start
       puts "\nUploading the policy and related cookbooks..."
-      uploader.upload
+      push.run
       puts "\nExecuting chef-client compile phase..."
-      # Define Chef::Config['config_file'] lest Ohai complain.
-      Chef::Config['config_file'] = exporter.chef_config_file
       chef_client.compile
       # Build a hash of all the recipes' resources, keyed by the canonical
       # name of the recipe (i.e. ohai::default).
       recipe_resources = {}
       chef_client.resource_collection.each do |resource|
         canonical_recipe = "#{resource.cookbook_name}::#{resource.recipe_name}"
-        unless config[:recipes].empty?
+        unless umami_config[:recipes].nil? || umami_config[:recipes].empty?
           # The user has explicitly requested that one or more recipes have
           # tests written, to the exclusion of others.
           # ONLY include the recipe if it matches the list.
-          next unless config[:recipes].include?(canonical_recipe)
+          next unless umami_config[:recipes].include?(canonical_recipe)
         end
         if recipe_resources.key?(canonical_recipe)
           recipe_resources[canonical_recipe] << resource
@@ -114,17 +124,17 @@ module Umami
       # Remove the temporary directory using a naive guard to ensure we're
       # deleting what we expect.
       re_export_path = Regexp.new('/tmp/umami')
-      FileUtils.rm_rf(exporter.export_root) if exporter.export_root.match(re_export_path)
+      FileUtils.rm_rf(chef_client.staging_dir) if chef_client.staging_dir.match(re_export_path)
 
-      if config[:unit_tests]
+      if umami_config[:unit_tests]
         puts "\nGenerating a set of unit tests..."
-        unit_tester = Umami::Test::Unit.new(config[:test_root])
+        unit_tester = Umami::Test::Unit.new(umami_config[:test_root])
         unit_tester.generate(recipe_resources)
       end
 
-      if config[:integration_tests]
+      if umami_config[:integration_tests]
         puts "\nGenerating a set of integration tests..."
-        integration_tester = Umami::Test::Integration.new(config[:test_root])
+        integration_tester = Umami::Test::Integration.new(umami_config[:test_root])
         integration_tester.generate(recipe_resources)
       end
     end

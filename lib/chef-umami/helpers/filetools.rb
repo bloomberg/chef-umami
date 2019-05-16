@@ -32,7 +32,7 @@ module Umami
         r = RuboCop::CLI.new
         # Don't output to STDOUT.
         args = [
-          '--only', 'Style/IndentationWidth,Style/IndentationConsistency',
+          '--only', 'Layout/IndentationWidth,Layout/IndentationConsistency',
           '--auto-correct',
           '--out', '/dev/null',
           path
